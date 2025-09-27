@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Park Theatre High Prairie | Now Playing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Define a custom purple to match the request */
+        .bg-purple-main { background-color: #9333EA; }
+        .text-purple-main { color: #9333EA; }
+        .border-purple-main { border-color: #9333EA; }
+        .hover\:bg-purple-darker:hover { background-color: #7E22CE; }
+        
+        /* Custom Dark Backgrounds (High Contrast Cineplex Feel) */
+        .bg-dark-cinematic { background-color: #0c0c16; } 
+        .bg-dark-card { background-color: #1a1a2e; } 
+        .bg-dark-input { background-color: #31314d; } 
+        
+        /* Custom Shadow Utility for Poster Frame - UPDATED STYLES */
+        /* Deep, dark shadow for depth */
+        .shadow-3xl-dark {
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.9);
+        }
+        /* Purple glow effect on hover */
+        .hover\:shadow-purple-glow:hover {
+            box-shadow: 0 0 20px rgba(147, 51, 234, 0.7), 0 30px 60px -15px rgba(0, 0, 0, 0.9);
+        }
+
+        /* FIX: Enhanced Active Date Styling for better visibility */
+        .active-date { 
+            background-color: #9333EA; 
+            color: white !important; 
+            /* Added white border for high contrast separation */
+            border: 2px solid white; 
+            /* Added a soft purple glow */
+            box-shadow: 0 0 10px rgba(147, 51, 234, 0.8), 0 0 5px rgba(147, 51, 234, 0.6);
+            transform: scale(1.02);
+        }
+        /* Ensure that the default date button has space for the border */
+        .date-selector-btn {
+            border: 2px solid transparent;
+            box-sizing: border-box; /* Crucial for sizing consistency */
+        }
+
+
+        /* Ensure poster image fits perfectly inside its container */
+        .poster-frame img {
+            object-fit: contain;
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Spinner style */
+        .spinner {
+            border-top-color: #9333EA; 
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Custom style to hide scrollbar but keep scrolling functionality */
+        #date-scroll-container {
+            overflow-x: hidden; /* Hide horizontal scrollbar */
+        }
+        #date-scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+        #date-scroll-container {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        
+        /* Added max-width to the date buttons to improve fit on small screens */
+        .date-selector-btn {
+            min-width: 6rem; /* 96px */
+            max-width: 6rem;
+        }
+        
+        /* FIX: Increased width for 6 dates (6 * 6rem = 36rem) + 5 gaps (5 * 1rem) + extra buffer = 42rem */
+        .date-carousel-width {
+            width: 42rem;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-dark': '#0c0c16', 
+                        'secondary-light': '#E5E7EB',
+                        'accent-purple': '#9333EA', 
+                        'warning-orange': '#F59E0B', 
+                        'soldout-gray': '#4B5563', 
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-dark-cinematic font-sans text-secondary-light min-h-screen">
+
+    <header class="bg-dark-cinematic shadow-2xl sticky top-0 z-50 border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            
+            <h1 class="text-3xl font-extrabold tracking-wider">
+                <span class="text-white">PARK</span> 
+                <span class="text-purple-main">THEATRE</span>
+                <span class="text-xl text-gray-500 font-normal ml-2">| High Prairie</span>
+            </h1>
+            
+            <nav class="space-x-6 text-base text-white font-semibold flex items-center">
+                <a href="#" class="text-purple-main">NOW PLAYING</a>
+                
+                <a href="https://facebook.com/ParkTheatreHighPrairie" target="_blank"
+                   class="text-white hover:text-purple-main transition duration-150 ml-4"
+                   title="Visit our Facebook Page">
+                    <i class="fab fa-facebook-square text-2xl"></i>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <h2 class="text-4xl sm:text-5xl font-extrabold text-white mb-6 text-center uppercase tracking-wider">
+            NOW PLAYING
+        </h2>
+        
+        <div class="flex justify-center items-center mb-8">
+            <div class="flex items-center space-x-0">
+                
+                <button id="scroll-left-btn" onclick="scrollDatesLeft()" class="p-2 rounded-full bg-dark-card hover:bg-gray-700 text-white disabled:opacity-30 transition">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                
+                <div id="date-scroll-container" class="overflow-x-hidden snap-x snap-mandatory date-carousel-width"> 
+                    <div id="date-selector" class="flex space-x-4 p-2"> 
+                        </div>
+                </div>
+
+                <button id="scroll-right-btn" onclick="scrollDatesRight()" class="p-2 rounded-full bg-dark-card hover:bg-gray-700 text-white disabled:opacity-30 transition">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div id="movie-list" class="grid grid-cols-1 gap-8">
+            <div id="loading-indicator" class="col-span-full flex justify-center items-center py-20">
+                <div class="spinner w-10 h-10 border-4 rounded-full border-gray-700"></div>
+                <p class="ml-4 text-xl text-gray-500">Loading showtimes from ticketing feed...</p>
+            </div>
+        </div>
+
+        <div id="trailer-modal" class="fixed inset-0 bg-black bg-opacity-90 hidden items-center justify-center p-4 z-50 transition-opacity duration-300" 
+             onclick="closeTrailerModal()">
+            <div class="bg-dark-card rounded-xl shadow-2xl w-full max-w-4xl h-[80vh] relative" onclick="event.stopPropagation()">
+                <button onclick="closeTrailerModal()" class="absolute top-0 right-0 m-3 text-white text-4xl leading-none z-50 opacity-75 hover:opacity-100 transition">
+                    ×
+                </button>
+                
+                <div id="trailer-modal-content" class="w-full h-full">
+                    </div>
+            </div>
+        </div>
+
+        <div id="message-box" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center p-4 z-20">
+            <div class="bg-dark-card p-6 rounded-xl shadow-2xl max-w-sm w-full border-t-4 border-purple-main">
+                <h3 id="message-title" class="text-2xl font-bold text-white mb-3"></h3>
+                <p id="message-content" class="text-secondary-light mb-4"></p>
+                <button onclick="document.getElementById('message-box').classList.add('hidden');"
+                        class="w-full py-2 bg-purple-main rounded-lg text-white font-semibold hover:bg-purple-darker transition duration-150">
+                    Close
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <section class="bg-dark-cinematic border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <div class="md:col-span-1 bg-dark-card p-6 rounded-xl shadow-xl border border-gray-800 h-full">
+                <h3 class="text-2xl font-bold text-white mb-4 border-b border-purple-main pb-2">Contact Park Theatre</h3>
+                <div class="space-y-3 text-gray-300">
+                    <p class="flex items-start space-x-3">
+                        <i class="fas fa-map-marker-alt text-purple-main pt-1"></i>
+                        <span>
+                            <span class="font-semibold text-white">Address:</span><br>
+                            4921 52 Ave, High Prairie, AB T0G 1E0
+                        </span>
+                    </p>
+                    <p class="flex items-center space-x-3">
+                        <i class="fas fa-phone text-purple-main"></i>
+                        <span>
+                            <span class="font-semibold text-white">Phone:</span> (780) 523 3466
+                        </span>
+                    </p>
+                    <p class="flex items-center space-x-3">
+                        <i class="fas fa-envelope text-purple-main"></i>
+                        <a href="mailto:Parktheatrehp@gmail.com" class="hover:text-purple-main transition duration-150">
+                            <span class="font-semibold text-white">Email:</span> Parktheatrehp@gmail.com
+                        </a>
+                    </p>
+                    <p class="pt-2">
+                        <a href="https://facebook.com/ParkTheatreHighPrairie" target="_blank"
+                           class="inline-flex items-center space-x-2 text-white hover:text-purple-main transition duration-150 font-semibold"
+                           title="Follow us on Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                            <span>Follow us on Facebook</span>
+                        </a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="md:col-span-2">
+                <h3 class="text-2xl font-bold text-white mb-4 border-b border-purple-main pb-2">Our Location</h3>
+                <div class="relative w-full h-96 rounded-xl overflow-hidden shadow-2xl border border-gray-700">
+                    <iframe
+                        title="Map of Park Theatre High Prairie"
+                        src="https://maps.google.com/maps?q=Park+Theatre+4921+52+Ave,+High+Prairie,+AB+T0G+1E0&t=&z=14&ie=UTF8&iwloc=&output=embed"
+                        width="100%"
+                        height="100%"
+                        frameborder="0"
+                        style="border:0;"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                    ></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-dark-cinematic py-8 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 text-center text-gray-600">
+            <p>© 2025 Park Theatre, High Prairie. All Rights Reserved. Two Screens.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- CONFIGURATION & ELEMENTS ---
+        const API_ENDPOINT = '/api/movies'; 
+        const MOVIE_LIST_EL = document.getElementById('movie-list');
+        const DATE_SELECTOR_EL = document.getElementById('date-selector');
+        const DATE_SCROLL_CONTAINER = document.getElementById('date-scroll-container');
+        const SCROLL_LEFT_BTN = document.getElementById('scroll-left-btn');
+        const SCROLL_RIGHT_BTN = document.getElementById('scroll-right-btn');
+        const LOADING_EL = document.getElementById('loading-indicator');
+        const TRAILER_MODAL = document.getElementById('trailer-modal');
+        const TRAILER_MODAL_CONTENT = document.getElementById('trailer-modal-content');
+
+        // --- STATE ---
+        const DATES_PER_VIEW = 6;
+        let allMovies = [];
+        let availableDates = [];
+        let activeDate = null;
+        let dateWindowStart = 0; // Index of the first date currently displayed
+
+        // --- UTILITY FUNCTIONS ---
+
+        /**
+         * Converts 24-hour time string (HH:MM:SS) to 12-hour format (h:mm AM/PM).
+         */
+        function formatTime12hr(time24) {
+            if (!time24 || time24 === 'None') return 'N/A';
+            try {
+                // We only care about HH:MM
+                const [hours24, minutes] = time24.split(':');
+                let hours = parseInt(hours24, 10);
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12;
+                hours = hours ? hours : 12; // The hour '0' should be '12'
+                
+                return `${hours}:${minutes} ${ampm}`;
+            } catch {
+                return time24;
+            }
+        }
+        
+        /**
+         * Converts minutes into "Xh Ym" format.
+         */
+        function formatRuntime(minutes) {
+            if (!minutes || isNaN(parseInt(minutes))) return 'N/A';
+            const totalMinutes = parseInt(minutes, 10);
+            const h = Math.floor(totalMinutes / 60);
+            const m = totalMinutes % 60;
+            
+            if (h > 0 && m > 0) return `${h}h ${m}m`;
+            if (h > 0) return `${h}h`;
+            return `${m}m`;
+        }
+
+
+        function displayMessage(title, content) {
+            document.getElementById('message-title').textContent = title;
+            document.getElementById('message-content').textContent = content;
+            document.getElementById('message-box').classList.remove('hidden');
+            document.getElementById('message-box').classList.add('flex');
+        }
+
+        /**
+         * Opens the trailer in a modal window.
+         */
+        function openTrailerModal(youtubeId) {
+            if (!youtubeId) return;
+            const embedUrl = youtubeId.includes('youtube.com/embed') ? youtubeId : `https://www.youtube.com/embed/${youtubeId}`;
+
+            TRAILER_MODAL_CONTENT.innerHTML = `
+                <iframe 
+                    class="w-full h-full rounded-xl" 
+                    src="${embedUrl}?autoplay=1" 
+                    frameborder="0" 
+                    allow="autoplay; encrypted-media; gyroscope;" 
+                    allowfullscreen
+                ></iframe>
+            `;
+            TRAILER_MODAL.classList.remove('hidden');
+            TRAILER_MODAL.classList.add('flex');
+        }
+
+        /**
+         * Closes the trailer modal and stops video playback.
+         */
+        function closeTrailerModal() {
+            TRAILER_MODAL.classList.remove('flex');
+            TRAILER_MODAL.classList.add('hidden');
+            // Stop video playback by clearing the iframe content
+            TRAILER_MODAL_CONTENT.innerHTML = '';
+        }
+
+        /**
+         * Converts date string (YYYY-MM-DD) to a formatted string.
+         * Includes robust "Today" and "Tomorrow" detection.
+         */
+        function formatDate(dateStr, includeDay = false) {
+            if (!dateStr || dateStr === 'None' || dateStr === 'N/A') return 'TBA';
+            try {
+                // Get today's and tomorrow's date strings for comparison
+                const now = new Date();
+                const todayDateString = now.toISOString().slice(0, 10); 
+                
+                const tomorrow = new Date(now);
+                tomorrow.setDate(now.getDate() + 1);
+                const tomorrowDateString = tomorrow.toISOString().slice(0, 10);
+                
+                // 1. Robust Labeling
+                if (includeDay) {
+                    if (dateStr === todayDateString) {
+                        return 'Today';
+                    }
+                    if (dateStr === tomorrowDateString) {
+                        return 'Tomorrow';
+                    }
+                }
+
+                // 2. Format the date object for display
+                // We use the date string constructor to ensure the date is parsed correctly.
+                const dateObj = new Date(dateStr + 'T00:00:00'); 
+                
+                let options = { month: 'short', day: 'numeric' };
+                if (includeDay) {
+                    options = { weekday: 'short', month: 'short', day: 'numeric' };
+                }
+                
+                // Ensure correct formatting for standard days, removing the comma.
+                return dateObj.toLocaleDateString('en-US', options).replace(/,/, ''); 
+
+            } catch {
+                return dateStr;
+            }
+        }
+        
+        // --- DATE SCROLLING LOGIC ---
+
+        function updateScrollButtons() {
+            SCROLL_LEFT_BTN.disabled = dateWindowStart === 0;
+            // The DATES_PER_VIEW is 6, so if we're at index N, and the length is N+1, the button is disabled.
+            SCROLL_RIGHT_BTN.disabled = dateWindowStart + DATES_PER_VIEW >= availableDates.length;
+        }
+
+        function scrollDatesLeft() {
+            if (dateWindowStart > 0) {
+                // FIX: Scroll one date at a time for smooth browsing
+                dateWindowStart = Math.max(0, dateWindowStart - 1); 
+                renderDateSelector();
+            }
+        }
+
+        function scrollDatesRight() {
+            if (dateWindowStart + DATES_PER_VIEW < availableDates.length) {
+                // FIX: Scroll one date at a time for smooth browsing
+                dateWindowStart = Math.min(availableDates.length - DATES_PER_VIEW, dateWindowStart + 1); 
+                renderDateSelector();
+            }
+        }
+
+
+        /**
+         * Renders the dates currently visible within the scrolling window.
+         */
+        function renderDateSelector() {
+            if (availableDates.length === 0) {
+                DATE_SELECTOR_EL.innerHTML = '';
+                updateScrollButtons();
+                return;
+            }
+
+            const datesToDisplay = availableDates.slice(dateWindowStart, dateWindowStart + DATES_PER_VIEW);
+
+            DATE_SELECTOR_EL.innerHTML = datesToDisplay.map(dateStr => {
+                const isSelected = dateStr === activeDate;
+                
+                // Get the day of the week (handles 'Today'/'Tomorrow')
+                const formattedDate = formatDate(dateStr, true);
+                
+                // Split the formatted date into parts for display
+                const dayParts = formattedDate.split(' '); 
+                
+                // Determine the day label (TODAY, TOMORROW, or Weekday)
+                let dayLabel, dayNum, monthLabel;
+
+                if (dayParts.length === 1) { // TODAY or TOMORROW
+                    dayLabel = dayParts[0].toUpperCase();
+                    // Fall back to standard format for number/month
+                    const standardParts = formatDate(dateStr).split(' ');
+                    dayNum = standardParts.length > 1 ? standardParts[1] : ''; 
+                    monthLabel = standardParts.length > 0 ? standardParts[0].toUpperCase() : '';
+                } else { // Standard Day (e.g., Fri Sep 27)
+                    dayLabel = dayParts[0].toUpperCase();
+                    monthLabel = dayParts[1].toUpperCase();
+                    dayNum = dayParts[2];
+                }
+
+                // Added flex-none to ensure buttons stay sized correctly inside the scroller
+                return `
+                    <button 
+                        class="date-selector-btn flex-none w-24 py-2 rounded-xl text-center transition duration-150 
+                               bg-gray-800 text-gray-400 hover:bg-gray-700 ${isSelected ? 'active-date' : ''}"
+                        data-date="${dateStr}"
+                        onclick="selectDate('${dateStr}')"
+                    >
+                        <span class="block text-sm font-medium">${dayLabel}</span>
+                        <span class="block text-xl font-bold">${dayNum}</span>
+                        <span class="block text-xs uppercase">${monthLabel}</span>
+                    </button>
+                `;
+            }).join('');
+
+            updateScrollButtons();
+        }
+
+        // --- MOVIE RENDERING LOGIC ---
+
+        /**
+         * Renders the list of all movie cards based on the activeDate.
+         */
+        function renderMovieList() {
+            // Render the global date selector first (to set active classes)
+            renderDateSelector();
+            
+            // --- FILTERING LOGIC: Only render movies with showtimes on the activeDate ---
+            const filteredMovies = allMovies.filter(movie => {
+                const showtimes = movie.showtimesByDate[activeDate];
+                return showtimes && showtimes.length > 0;
+            });
+
+            if (filteredMovies.length === 0) {
+                 MOVIE_LIST_EL.innerHTML = `
+                    <div class="col-span-full p-8 text-center bg-dark-card rounded-xl">
+                        <p class="text-xl text-white">No showtimes available for ${formatDate(activeDate, true)}.</p>
+                        <p class="mt-2 text-gray-500">Please select a different date above or check back tomorrow.</p>
+                    </div>
+                `;
+                return; // Stop rendering if no movies pass the filter
+            }
+
+            // Render the filtered list of movies
+            MOVIE_LIST_EL.innerHTML = filteredMovies.map(movie => createMovieCard(movie)).join('');
+        }
+
+        /**
+         * Generates the HTML for a single movie card.
+         */
+        function createMovieCard(movie) {
+            const placeholderImageUrl = `https://placehold.co/180x270/111827/FFFFFF?text=${encodeURIComponent(movie.title || 'Movie Poster')}`;
+            const imageSrc = movie.posterUrl || placeholderImageUrl;
+            const currentShowtimes = movie.showtimesByDate[activeDate] || [];
+            
+            // Parse YouTube ID (Handles both full URL and just the ID)
+            const youtubeId = movie.youtubeId ? (movie.youtubeId.includes('youtube.com') ? movie.youtubeId.split('/').pop().replace('embed/', '') : movie.youtubeId) : null;
+            
+            // Get current date/time in the user's local timezone
+            const now = new Date();
+            const todayDateString = now.toISOString().slice(0, 10);
+            const isToday = activeDate === todayDateString;
+
+
+            const showtimeButtonsHTML = currentShowtimes.map(showtime => {
+                const displayTime = formatTime12hr(showtime.time);
+                let buttonClasses = 'bg-dark-input text-white hover:bg-purple-darker';
+                let titleText = `Screen: ${showtime.screen}`;
+                let buttonContent = displayTime;
+                let isClickable = true;
+
+                let showIsPast = false;
+                if (isToday) {
+                    // 1. Construct the show time string using the user's local browser timezone
+                    const showDateTime = new Date(`${activeDate}T${showtime.time}`);
+                    
+                    // 2. Check if the current time is 5 minutes past the show time
+                    if (now.getTime() > showDateTime.getTime() + (5 * 60 * 1000)) { 
+                        showIsPast = true;
+                    }
+                }
+
+                // --- RENDERING LOGIC ---
+
+                if (showIsPast) {
+                    // 1. Show has passed (Priority 1)
+                    buttonClasses = 'bg-gray-800 text-red-400 cursor-not-allowed';
+                    titleText = `Screen: ${showtime.screen} | Show has started`;
+                    buttonContent = 'Show Started';
+                    isClickable = false;
+                    
+                    // Rectangular button shape (rounded-md)
+                    return `<span class="${buttonClasses} text-base font-semibold px-4 py-2 rounded-md cursor-not-allowed" title="${titleText}">${buttonContent}</span>`;
+                } 
+                
+                if (showtime.soldOutLevel === 'S') {
+                    // 2. Sold Out (Priority 2)
+                    buttonClasses = 'bg-soldout-gray text-gray-400 cursor-not-allowed line-through';
+                    titleText = `Screen: ${showtime.screen} | Sold Out`;
+                    isClickable = false;
+                    
+                    // Rectangular button shape (rounded-md)
+                    return `<span class="${buttonClasses} text-base font-semibold px-4 py-2 rounded-md cursor-not-allowed" title="${titleText}">${buttonContent}</span>`;
+                } 
+                
+                if (showtime.soldOutLevel === 'W') {
+                    // 3. Limited Availability
+                    buttonClasses = 'bg-warning-orange text-white hover:bg-orange-600';
+                    titleText = `Screen: ${showtime.screen} | Limited Seats`;
+                }
+
+                // 4. Available (Default/Final State)
+                return `
+                    <a href="${showtime.bookingUrl}" target="_blank"
+                        class="${buttonClasses} text-base font-semibold px-4 py-2 rounded-md transition duration-150 shadow-md whitespace-nowrap"
+                        title="Book tickets for ${showtime.screen}"
+                    >
+                        ${buttonContent}
+                    </a>
+                `;
+            }).join('');
+
+            return `
+                <div class="grid grid-cols-1 md:grid-cols-5 bg-dark-card rounded-xl shadow-xl overflow-hidden border border-gray-800">
+                    
+                    <div class="col-span-1 relative p-4 bg-dark-input flex justify-center items-center poster-frame" style="min-height: 350px;">
+                        <img src="${imageSrc}" alt="Poster for ${movie.title}" 
+                             class="rounded-lg shadow-3xl-dark transition duration-300 hover:scale-[1.05] hover:shadow-purple-glow" 
+                             onerror="this.onerror=null; this.src='${placeholderImageUrl}';">
+                    </div>
+
+                    <div class="md:col-span-3 p-6 flex flex-col justify-center">
+                        
+                        <div class="flex items-center mb-2">
+                             <span class="text-sm font-bold uppercase py-1.5 px-3 rounded-md border border-gray-600 text-gray-400 bg-gray-800 tracking-wider">
+                                ${movie.certificate || 'UNR'}
+                            </span>
+                        </div>
+                        
+                        <h3 class="text-3xl font-extrabold text-white mb-2 uppercase">${movie.title || 'Untitled Movie'}</h3>
+                        
+                        <div class="flex flex-wrap gap-x-4 gap-y-1 text-sm font-medium text-gray-400 mb-4">
+                            <span>Runtime: ${formatRuntime(movie.runningTime)}</span> 
+                            <span>| Dir: ${movie.directors || 'N/A'}</span>
+                            <span>| Starring: ${movie.actors || 'N/A'}</span>
+                        </div>
+                        <p class="text-base text-gray-300">${movie.synopsis || 'Synopsis not available.'}</p>
+                        
+                        ${youtubeId ? `
+                            <button 
+                                class="mt-4 flex items-center space-x-2 w-full sm:w-48 px-4 py-2 bg-purple-main text-white text-sm font-bold rounded-lg 
+                                       shadow-lg hover:bg-purple-darker transition duration-200 justify-center"
+                                onclick="openTrailerModal('${youtubeId}')"
+                                title="Watch Trailer"
+                            >
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 4l15 8-15 8z"/></svg>
+                                <span>WATCH TRAILER</span>
+                            </button>
+                        ` : ''}
+                    </div>
+
+                    <div class="md:col-span-1 p-6 flex flex-col justify-start border-t border-gray-800 md:border-t-0 md:border-l">
+                        <h4 class="text-xl font-bold text-white mb-3">Showtimes</h4>
+                        <div class="flex flex-wrap gap-2 overflow-y-auto"> 
+                            ${showtimeButtonsHTML}
+                        </div>
+                        <p class="text-xs text-gray-500 mt-4">Click any time to purchase tickets.</p>
+                    </div>
+
+                </div>
+            `;
+        }
+        
+        /**
+         * Handles selecting a new date, updates activeDate, and re-renders the list.
+         */
+        function selectDate(newDate) {
+            // Check if the date is already active to prevent unnecessary re-rendering
+            if (newDate === activeDate) return; 
+
+            // Remove active class from old button and add to new
+            const oldBtn = document.querySelector(`.active-date`);
+            if (oldBtn) oldBtn.classList.remove('active-date');
+
+            const newBtn = document.querySelector(`[data-date="${newDate}"]`);
+            if (newBtn) newBtn.classList.add('active-date');
+
+            activeDate = newDate;
+            renderMovieList();
+        }
+
+        /**
+         * Fetches the clean JSON list of movies from the local Python proxy.
+         */
+        async function fetchMovies() {
+            LOADING_EL.classList.remove('hidden');
+            
+            try {
+                const response = await fetch(API_ENDPOINT);
+                
+                if (!response.ok) {
+                    throw new Error(`Proxy status: ${response.status}. Ensure the Python server is running and the XML is valid.`);
+                }
+                
+                allMovies = await response.json();
+                
+                // 1. Determine all available dates across all movies
+                const dateSet = new Set();
+                allMovies.forEach(movie => {
+                    Object.keys(movie.showtimesByDate).forEach(date => dateSet.add(date));
+                });
+                
+                // Sort dates chronologically
+                let dates = Array.from(dateSet).sort();
+                
+                // 2. Filter out past dates 
+                const todayDateString = new Date().toISOString().slice(0, 10);
+                // Only filter dates strictly before today. Today (todayDateString) must be included.
+                availableDates = dates.filter(dateStr => dateStr >= todayDateString);
+                
+                // 3. Set the active date to the first available date (Today or first future date)
+                if (availableDates.length > 0) {
+                    activeDate = availableDates[0];
+                    // Also ensure the window starts at the current day if possible
+                    dateWindowStart = 0; 
+                }
+                
+                // 4. Render the full UI
+                renderMovieList();
+
+            } catch (error) {
+                console.error("Failed to load or parse movie data:", error);
+                
+                MOVIE_LIST_EL.innerHTML = `
+                    <div class="col-span-full p-8 text-center bg-dark-card rounded-xl">
+                        <p class="text-xl text-accent-purple">Data Retrieval Failed</p>
+                        <p class="mt-2 text-gray-400">Error: ${error.message}</p>
+                        <p class="mt-4 text-sm text-gray-500">Please ensure 'proxy_server.py' is actively running in your command line.</p>
+                    </div>
+                `;
+                displayMessage(
+                    "Data Error: Check Server Console",
+                    `Could not load movies. Please ensure your Python proxy script is running and connected to the ticketing feed.`
+                );
+
+            } finally {
+                LOADING_EL.classList.add('hidden');
+            }
+        }
+
+        // --- Initialize the App ---
+        window.onload = fetchMovies;
+
+    </script>
+</body>
+</html>
