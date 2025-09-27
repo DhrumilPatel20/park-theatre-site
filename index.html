@@ -77,9 +77,11 @@
             max-width: 6rem;
         }
         
-        /* FIX: Increased width for 6 dates (6 * 6rem = 36rem) + 5 gaps (5 * 1rem) + extra buffer = 42rem */
-        .date-carousel-width {
-            width: 42rem;
+        /* Date Carousel Width Fix: Apply custom width only on medium screens and up */
+        @media (min-width: 768px) {
+            .date-carousel-width {
+                width: 42rem; /* Exact width for 6 items + gaps */
+            }
         }
     </style>
     <script>
@@ -131,18 +133,16 @@
         </h2>
         
         <div class="flex justify-center items-center mb-8">
-            <div class="flex items-center space-x-0">
-                
-                <button id="scroll-left-btn" onclick="scrollDatesLeft()" class="p-2 rounded-full bg-dark-card hover:bg-gray-700 text-white disabled:opacity-30 transition">
+            <div class="flex items-center space-x-0 w-full md:w-auto"> <button id="scroll-left-btn" onclick="scrollDatesLeft()" class="flex-shrink-0 p-2 rounded-full bg-dark-card hover:bg-gray-700 text-white disabled:opacity-30 transition">
                     <i class="fas fa-chevron-left"></i>
                 </button>
                 
-                <div id="date-scroll-container" class="overflow-x-hidden snap-x snap-mandatory date-carousel-width"> 
+                <div id="date-scroll-container" class="overflow-x-hidden snap-x snap-mandatory w-full md:date-carousel-width"> 
                     <div id="date-selector" class="flex space-x-4 p-2"> 
                         </div>
                 </div>
 
-                <button id="scroll-right-btn" onclick="scrollDatesRight()" class="p-2 rounded-full bg-dark-card hover:bg-gray-700 text-white disabled:opacity-30 transition">
+                <button id="scroll-right-btn" onclick="scrollDatesRight()" class="flex-shrink-0 p-2 rounded-full bg-dark-card hover:bg-gray-700 text-white disabled:opacity-30 transition">
                     <i class="fas fa-chevron-right"></i>
                 </button>
             </div>
@@ -385,7 +385,7 @@
 
         function scrollDatesLeft() {
             if (dateWindowStart > 0) {
-                // FIX: Scroll one date at a time for smooth browsing
+                // Scroll one date at a time for smooth browsing
                 dateWindowStart = Math.max(0, dateWindowStart - 1); 
                 renderDateSelector();
             }
@@ -393,7 +393,7 @@
 
         function scrollDatesRight() {
             if (dateWindowStart + DATES_PER_VIEW < availableDates.length) {
-                // FIX: Scroll one date at a time for smooth browsing
+                // Scroll one date at a time for smooth browsing
                 dateWindowStart = Math.min(availableDates.length - DATES_PER_VIEW, dateWindowStart + 1); 
                 renderDateSelector();
             }

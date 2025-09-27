@@ -45,6 +45,13 @@ def extract_and_format_data(xml_data):
 
             youtube_url = get_text(film_el, 'Youtube')
             
+            # FIX: Prioritize larger poster sizes first (Img_10 or Img_5) 
+            # and fall back to smaller app/web sizes if the others are missing.
+            high_res_poster = get_text(film_el, 'Img_10') or get_text(film_el, 'Img_5')
+            fallback_poster = get_text(film_el, 'Img_app') or get_text(film_el, 'Img_1s')
+            
+            final_poster_url = high_res_poster or fallback_poster
+
             films[code] = {
                 'code': code,
                 'title': get_text(film_el, 'FilmTitle') or get_text(film_el, 'ShortFilmTitle'),
@@ -57,7 +64,7 @@ def extract_and_format_data(xml_data):
                 'actors': get_text(film_el, 'Actors'),
                 'startDate': get_text(film_el, 'StartDate'),
                 'endDate': get_text(film_el, 'EndDate'),
-                'posterUrl': get_text(film_el, 'Img_app') or get_text(film_el, 'Img_1s'),
+                'posterUrl': final_poster_url, # Use the prioritized URL
                 'youtubeId': extract_youtube_id(youtube_url),
                 'showtimesByDate': {},
             }
@@ -113,8 +120,7 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
             print(f"--- Proxying request to: {EXTERNAL_API_URL} ---")
             
             try:
-                # CRITICAL FIX: Ensure permissive SSL context creation
-                # This should prevent SSL/certificate errors on the Windows testing machine and in deployment
+                # Ensure permissive SSL context creation
                 context = ssl._create_unverified_context()
                 
                 # Fetch data from the external URL
