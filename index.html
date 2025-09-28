@@ -19,11 +19,9 @@
         .bg-dark-input { background-color: #31314d; } 
         
         /* Custom Shadow Utility for Poster Frame - UPDATED STYLES */
-        /* Deep, dark shadow for depth */
         .shadow-3xl-dark {
             box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.9);
         }
-        /* Purple glow effect on hover */
         .hover\:shadow-purple-glow:hover {
             box-shadow: 0 0 20px rgba(147, 51, 234, 0.7), 0 30px 60px -15px rgba(0, 0, 0, 0.9);
         }
@@ -32,9 +30,7 @@
         .active-date { 
             background-color: #9333EA; 
             color: white !important; 
-            /* Added white border for high contrast separation */
             border: 2px solid white; 
-            /* Added a soft purple glow */
             box-shadow: 0 0 10px rgba(147, 51, 234, 0.8), 0 0 5px rgba(147, 51, 234, 0.6);
             transform: scale(1.02);
         }
@@ -43,7 +39,6 @@
             border: 2px solid transparent;
             box-sizing: border-box; /* Crucial for sizing consistency */
         }
-
 
         /* Ensure poster image fits perfectly inside its container */
         .poster-frame img {
@@ -77,11 +72,38 @@
             max-width: 6rem;
         }
         
-        /* Date Carousel Width Fix: Apply custom width only on medium screens and up */
+        /* FIX: Calculated width for 6 dates + gaps */
         @media (min-width: 768px) {
             .date-carousel-width {
                 width: 42rem; /* Exact width for 6 items + gaps */
             }
+        }
+
+        /* LOGO FIXES */
+        /* FIX: Use max-height and w-auto to prevent squishing */
+        .header-logo {
+            max-height: 80px; 
+            width: auto;
+        }
+        /* Adjusted footer size with max-width */
+        .footer-logo {
+            max-width: 220px; 
+            width: auto;
+        }
+        /* Style for the logo container in the header */
+        .header-logo-frame {
+            background-color: var(--bg-dark-card); /* Dark background for framing */
+            padding: 8px; /* Slight padding around the logo */
+            border-radius: 8px;
+            /* GLOW EFFECT: Added a box shadow for the marquee glow effect */
+            box-shadow: 0 0 10px rgba(147, 51, 234, 0.4), 0 0 5px rgba(255, 255, 255, 0.2);
+            /* NEW: Ensure the frame doesn't stretch and occupies the necessary space */
+            flex-shrink: 0;
+        }
+        /* FIX: Tighter padding for the door time box */
+        .door-time-box {
+            padding-top: 0.5rem; /* py-2 */
+            padding-bottom: 0.5rem; /* py-2 */
         }
     </style>
     <script>
@@ -108,32 +130,36 @@
     <header class="bg-dark-cinematic shadow-2xl sticky top-0 z-50 border-b border-gray-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
             
-            <h1 class="text-3xl font-extrabold tracking-wider">
-                <span class="text-white">PARK</span> 
-                <span class="text-purple-main">THEATRE</span>
-                <span class="text-xl text-gray-500 font-normal ml-2">| High Prairie</span>
-            </h1>
+            <div class="flex justify-center md:justify-start w-full md:w-auto">
+                 <div class="header-logo-frame">
+                     <img src="./Theatre logo.webp" alt="Park Theatre Logo" class="header-logo">
+                 </div>
+            </div>
             
-            <nav class="space-x-6 text-base text-white font-semibold flex items-center">
-                <a href="#" class="text-purple-main">NOW PLAYING</a>
-                
-                <a href="https://facebook.com/ParkTheatreHighPrairie" target="_blank"
-                   class="text-white hover:text-purple-main transition duration-150 ml-4"
-                   title="Visit our Facebook Page">
-                    <i class="fab fa-facebook-square text-2xl"></i>
-                </a>
-            </nav>
+            <nav class="space-x-6 text-base text-white font-semibold flex items-center hidden md:flex">
+                </nav>
         </div>
     </header>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
-        <h2 class="text-4xl sm:text-5xl font-extrabold text-white mb-6 text-center uppercase tracking-wider">
+        <h2 class="text-5xl font-extrabold text-white mb-1 text-center uppercase tracking-wider">
             NOW PLAYING
         </h2>
+        <p class="text-xl font-extrabold text-purple-main mb-6 text-center uppercase tracking-wider">
+            HIGH PRAIRIE
+        </p>
+
+        <div class="text-center bg-purple-main/20 py-2 rounded-lg border border-purple-main/50 mb-8 shadow-md door-time-box max-w-lg mx-auto">
+            <p class="text-sm sm:text-base font-extrabold text-white uppercase tracking-wider">
+                DOORS OPEN 1 HOUR BEFORE EACH SHOWTIME
+            </p>
+        </div>
         
         <div class="flex justify-center items-center mb-8">
-            <div class="flex items-center space-x-0 w-full md:w-auto"> <button id="scroll-left-btn" onclick="scrollDatesLeft()" class="flex-shrink-0 p-2 rounded-full bg-dark-card hover:bg-gray-700 text-white disabled:opacity-30 transition">
+            <div class="flex items-center space-x-0 w-full md:w-auto">
+                
+                <button id="scroll-left-btn" onclick="scrollDatesLeft()" class="flex-shrink-0 p-2 rounded-full bg-dark-card hover:bg-gray-700 text-white disabled:opacity-30 transition">
                     <i class="fas fa-chevron-left"></i>
                 </button>
                 
@@ -180,64 +206,58 @@
 
     </main>
 
-    <section class="bg-dark-cinematic border-t border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+    <footer class="bg-dark-cinematic border-t border-gray-800 py-10 md:py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             
-            <div class="md:col-span-1 bg-dark-card p-6 rounded-xl shadow-xl border border-gray-800 h-full">
-                <h3 class="text-2xl font-bold text-white mb-4 border-b border-purple-main pb-2">Contact Park Theatre</h3>
-                <div class="space-y-3 text-gray-300">
-                    <p class="flex items-start space-x-3">
-                        <i class="fas fa-map-marker-alt text-purple-main pt-1"></i>
-                        <span>
-                            <span class="font-semibold text-white">Address:</span><br>
-                            4921 52 Ave, High Prairie, AB T0G 1E0
-                        </span>
-                    </p>
-                    <p class="flex items-center space-x-3">
-                        <i class="fas fa-phone text-purple-main"></i>
-                        <span>
-                            <span class="font-semibold text-white">Phone:</span> (780) 523 3466
-                        </span>
-                    </p>
-                    <p class="flex items-center space-x-3">
-                        <i class="fas fa-envelope text-purple-main"></i>
-                        <a href="mailto:Parktheatrehp@gmail.com" class="hover:text-purple-main transition duration-150">
-                            <span class="font-semibold text-white">Email:</span> Parktheatrehp@gmail.com
-                        </a>
-                    </p>
-                    <p class="pt-2">
-                        <a href="https://facebook.com/ParkTheatreHighPrairie" target="_blank"
-                           class="inline-flex items-center space-x-2 text-white hover:text-purple-main transition duration-150 font-semibold"
-                           title="Follow us on Facebook">
-                            <i class="fab fa-facebook-f"></i>
-                            <span>Follow us on Facebook</span>
-                        </a>
-                    </p>
-                </div>
+            <div class="mb-8 flex justify-center">
+                <img src="./Theatre logo.webp" alt="Park Theatre High Prairie Logo" class="footer-logo">
             </div>
 
-            <div class="md:col-span-2">
-                <h3 class="text-2xl font-bold text-white mb-4 border-b border-purple-main pb-2">Our Location</h3>
-                <div class="relative w-full h-96 rounded-xl overflow-hidden shadow-2xl border border-gray-700">
-                    <iframe
-                        title="Map of Park Theatre High Prairie"
-                        src="https://maps.google.com/maps?q=Park+Theatre+4921+52+Ave,+High+Prairie,+AB+T0G+1E0&t=&z=14&ie=UTF8&iwloc=&output=embed"
-                        width="100%"
-                        height="100%"
-                        frameborder="0"
-                        style="border:0;"
-                        allowfullscreen=""
-                        loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade"
-                    ></iframe>
-                </div>
-            </div>
-        </div>
-    </section>
+            <div class="space-y-6">
+                <a 
+                    href="https://www.google.com/maps/dir/?api=1&destination=4921+52+Ave,+High+Prairie,+AB+T0G+1E0" 
+                    target="_blank" 
+                    class="flex flex-col items-center text-gray-300 hover:text-purple-main transition-colors duration-200 group"
+                    title="Get Directions on Google Maps"
+                >
+                    <i class="fas fa-map-marker-alt text-purple-main text-3xl mb-2 group-hover:text-white transition-colors duration-200"></i>
+                    <span class="text-lg font-semibold text-white group-hover:text-purple-main transition-colors duration-200 uppercase">High Prairie</span>
+                    <span class="text-base text-gray-400 mt-1">4921 52 Ave, High Prairie, AB T0G 1E0</span>
+                </a>
 
-    <footer class="bg-dark-cinematic py-8 border-t border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 text-center text-gray-600">
-            <p>© 2025 Park Theatre, High Prairie. All Rights Reserved. Two Screens.</p>
+                <a href="tel:+17805233466" class="flex items-center justify-center text-gray-300 hover:text-purple-main transition-colors duration-200">
+                    <i class="fas fa-phone text-purple-main text-2xl mr-3"></i>
+                    <span class="text-lg font-semibold text-white">(780) 523 3466</span>
+                </a>
+                
+                <a href="mailto:Parktheatrehp@gmail.com" class="flex items-center justify-center text-gray-300 hover:text-purple-main transition-colors duration-200">
+                    <i class="fas fa-envelope text-purple-main text-2xl mr-3"></i>
+                    <span class="text-lg font-semibold text-white">Parktheatrehp@gmail.com</span>
+                </a>
+            </div>
+
+            <div class="flex justify-center space-x-6 my-10 border-t border-b border-gray-700 py-6">
+                <a href="https://www.facebook.com/Park.Theatre.High.Prairie/" target="_blank" 
+                   class="w-12 h-12 flex items-center justify-center bg-purple-main rounded-full text-white text-2xl 
+                          hover:bg-purple-darker transform hover:scale-110 transition duration-300 shadow-lg"
+                   title="Visit us on Facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="https://www.instagram.com/park_theatre?igshid=OGQ5ZDc2ODk2ZA%3D%3D" target="_blank" 
+                   class="w-12 h-12 flex items-center justify-center bg-purple-main rounded-full text-white text-2xl 
+                          hover:bg-purple-darker transform hover:scale-110 transition duration-300 shadow-lg"
+                   title="Visit us on Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+
+            <div class="text-gray-500 text-sm">
+                <p>© <span id="current-year">2025</span> Park Theatre. All rights reserved.</p>
+                <p class="mt-1">Design by Park Theatre | Data provided by external ticketing feed.</p>
+            </div>
+            <script>
+                document.getElementById('current-year').textContent = new Date().getFullYear();
+            </script>
         </div>
     </footer>
 
@@ -334,19 +354,29 @@
         }
 
         /**
+         * Calculates and returns the standardized YYYY-MM-DD date string for a given Date object (local time).
+         */
+        function getDateStringLocal(dateObj) {
+            const year = dateObj.getFullYear();
+            const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const day = String(dateObj.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+        
+        /**
          * Converts date string (YYYY-MM-DD) to a formatted string.
-         * Includes robust "Today" and "Tomorrow" detection.
+         * Includes robust "Today" and "Tomorrow" detection using consistent local date strings.
          */
         function formatDate(dateStr, includeDay = false) {
             if (!dateStr || dateStr === 'None' || dateStr === 'N/A') return 'TBA';
             try {
-                // Get today's and tomorrow's date strings for comparison
+                // Get today's and tomorrow's date strings using local components
                 const now = new Date();
-                const todayDateString = now.toISOString().slice(0, 10); 
+                const todayDateString = getDateStringLocal(now); 
                 
                 const tomorrow = new Date(now);
                 tomorrow.setDate(now.getDate() + 1);
-                const tomorrowDateString = tomorrow.toISOString().slice(0, 10);
+                const tomorrowDateString = getDateStringLocal(tomorrow);
                 
                 // 1. Robust Labeling
                 if (includeDay) {
@@ -359,7 +389,7 @@
                 }
 
                 // 2. Format the date object for display
-                // We use the date string constructor to ensure the date is parsed correctly.
+                // Construct date using the string and 'T00:00:00' to ensure consistent local parsing
                 const dateObj = new Date(dateStr + 'T00:00:00'); 
                 
                 let options = { month: 'short', day: 'numeric' };
@@ -496,7 +526,7 @@
             
             // Get current date/time in the user's local timezone
             const now = new Date();
-            const todayDateString = now.toISOString().slice(0, 10);
+            const todayDateString = getDateStringLocal(now); // Use reliable local date string
             const isToday = activeDate === todayDateString;
 
 
@@ -512,8 +542,9 @@
                     // 1. Construct the show time string using the user's local browser timezone
                     const showDateTime = new Date(`${activeDate}T${showtime.time}`);
                     
-                    // 2. Check if the current time is 5 minutes past the show time
-                    if (now.getTime() > showDateTime.getTime() + (5 * 60 * 1000)) { 
+                    // 2. Check if the current time is 45 minutes past the show time (FIX)
+                    const CUTOFF_MS = 45 * 60 * 1000;
+                    if (now.getTime() > showDateTime.getTime() + CUTOFF_MS) { 
                         showIsPast = true;
                     }
                 }
@@ -523,8 +554,8 @@
                 if (showIsPast) {
                     // 1. Show has passed (Priority 1)
                     buttonClasses = 'bg-gray-800 text-red-400 cursor-not-allowed';
-                    titleText = `Screen: ${showtime.screen} | Show has started`;
-                    buttonContent = 'Show Started';
+                    titleText = `Screen: ${showtime.screen} | SHOW STARTED`; // Text updated to ALL CAPS
+                    buttonContent = 'SHOW STARTED';
                     isClickable = false;
                     
                     // Rectangular button shape (rounded-md)
@@ -534,7 +565,8 @@
                 if (showtime.soldOutLevel === 'S') {
                     // 2. Sold Out (Priority 2)
                     buttonClasses = 'bg-soldout-gray text-gray-400 cursor-not-allowed line-through';
-                    titleText = `Screen: ${showtime.screen} | Sold Out`;
+                    titleText = `Screen: ${showtime.screen} | SOLD OUT`; // Text updated to ALL CAPS
+                    buttonContent = 'SOLD OUT';
                     isClickable = false;
                     
                     // Rectangular button shape (rounded-md)
@@ -544,7 +576,7 @@
                 if (showtime.soldOutLevel === 'W') {
                     // 3. Limited Availability
                     buttonClasses = 'bg-warning-orange text-white hover:bg-orange-600';
-                    titleText = `Screen: ${showtime.screen} | Limited Seats`;
+                    titleText = `Screen: ${showtime.screen} | LIMITED SEATS`; // Text updated to ALL CAPS
                 }
 
                 // 4. Available (Default/Final State)
@@ -598,7 +630,7 @@
                     </div>
 
                     <div class="md:col-span-1 p-6 flex flex-col justify-start border-t border-gray-800 md:border-t-0 md:border-l">
-                        <h4 class="text-xl font-bold text-white mb-3">Showtimes</h4>
+                        <h4 class="text-xl font-bold text-white mb-3 uppercase tracking-wider">SHOWTIMES</h4>
                         <div class="flex flex-wrap gap-2 overflow-y-auto"> 
                             ${showtimeButtonsHTML}
                         </div>
@@ -652,8 +684,10 @@
                 let dates = Array.from(dateSet).sort();
                 
                 // 2. Filter out past dates 
-                const todayDateString = new Date().toISOString().slice(0, 10);
-                // Only filter dates strictly before today. Today (todayDateString) must be included.
+                const now = new Date();
+                const todayDateString = getDateStringLocal(now); // Use reliable local date string
+                
+                // Filter to keep today and future dates
                 availableDates = dates.filter(dateStr => dateStr >= todayDateString);
                 
                 // 3. Set the active date to the first available date (Today or first future date)
