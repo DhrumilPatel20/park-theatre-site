@@ -23,7 +23,7 @@
             box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.9);
         }
         .hover\:shadow-purple-glow:hover {
-            box-shadow: 0 0 20px rgba(147, 51, 234, 0.7), 0 30px 60px -15px rgba(0, 0, 0, 0.9);
+            box-shadow: 0 0 20px rgba(147, 51, 234, 0.8), 0 0 15px rgba(255, 255, 255, 0.4);
         }
 
         /* FIX: Enhanced Active Date Styling for better visibility */
@@ -96,7 +96,7 @@
             padding: 8px; /* Slight padding around the logo */
             border-radius: 8px;
             /* GLOW EFFECT: Added a box shadow for the marquee glow effect */
-            box-shadow: 0 0 10px rgba(147, 51, 234, 0.4), 0 0 5px rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 20px rgba(147, 51, 234, 0.8), 0 0 15px rgba(255, 255, 255, 0.4);
             /* NEW: Ensure the frame doesn't stretch and occupies the necessary space */
             flex-shrink: 0;
         }
@@ -127,6 +127,8 @@
 </head>
 <body class="bg-dark-cinematic font-sans text-secondary-light min-h-screen">
 
+    <iframe name="google-form-target" id="google-form-target" style="display:none;"></iframe>
+
     <header class="bg-dark-cinematic shadow-2xl sticky top-0 z-50 border-b border-gray-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
             
@@ -136,128 +138,198 @@
                  </div>
             </div>
             
-            <nav class="space-x-6 text-base text-white font-semibold flex items-center hidden md:flex">
-                </nav>
+            <nav class="hidden md:flex space-x-6 items-center font-extrabold text-sm uppercase tracking-wider">
+                <a href="#" onclick="showSection('now-playing-content', this)" id="nav-now-playing" class="text-white hover:text-purple-main transition duration-150">
+                    Now Playing
+                </a>
+                <a href="#" onclick="showSection('rental-content', this)" id="nav-rental" class="text-white hover:text-purple-main transition duration-150">
+                    Rental
+                </a>
+                <a href="#" onclick="showSection('contact-content', this)" id="nav-contact" class="text-white hover:text-purple-main transition duration-150">
+                    Contact Us
+                </a>
+                <a href="#" onclick="showSection('social-content', this)" id="nav-social" class="text-white hover:text-purple-main transition duration-150">
+                    Social Media
+                </a>
+            </nav>
+            
+            <button class="md:hidden text-white text-xl">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
-        <h2 class="text-5xl font-extrabold text-white mb-1 text-center uppercase tracking-wider">
-            NOW PLAYING
-        </h2>
-        <p class="text-xl font-extrabold text-purple-main mb-6 text-center uppercase tracking-wider">
-            HIGH PRAIRIE
-        </p>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-        <div class="text-center bg-purple-main/20 py-2 rounded-lg border border-purple-main/50 mb-8 shadow-md door-time-box max-w-lg mx-auto">
-            <p class="text-sm sm:text-base font-extrabold text-white uppercase tracking-wider">
-                DOORS OPEN 1 HOUR BEFORE EACH SHOWTIME
-            </p>
-        </div>
-        
-        <div class="flex justify-center items-center mb-8">
-            <div class="flex items-center space-x-0 w-full md:w-auto">
+        <section id="now-playing-content" class="content-section">
+            <main>
+                <h2 class="text-3xl sm:text-5xl font-extrabold text-white mb-1 text-center uppercase tracking-wider">
+                    NOW PLAYING
+                </h2>
+                <p class="text-base sm:text-xl font-extrabold text-purple-main mb-6 text-center uppercase tracking-wider">
+                    HIGH PRAIRIE
+                </p>
+
+                <div class="text-center bg-purple-main/20 py-2 rounded-lg border border-purple-main/50 mb-8 shadow-md door-time-box max-w-lg mx-auto">
+                    <p class="text-sm sm:text-base font-extrabold text-white uppercase tracking-wider">
+                        DOORS OPEN 1 HOUR BEFORE EACH SHOWTIME
+                    </p>
+                </div>
                 
-                <button id="scroll-left-btn" onclick="scrollDatesLeft()" class="flex-shrink-0 p-2 rounded-full bg-dark-card hover:bg-gray-700 text-white disabled:opacity-30 transition">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                
-                <div id="date-scroll-container" class="overflow-x-hidden snap-x snap-mandatory w-full md:date-carousel-width"> 
-                    <div id="date-selector" class="flex space-x-4 p-2"> 
+                <div class="flex justify-center items-center mb-8">
+                    <div class="flex items-center space-x-0 w-full md:w-auto">
+                        <button id="scroll-left-btn" onclick="scrollDatesLeft()" class="flex-shrink-0 p-2 rounded-full bg-dark-card hover:bg-gray-700 text-white disabled:opacity-30 transition">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <div id="date-scroll-container" class="overflow-x-hidden snap-x snap-mandatory w-full md:date-carousel-width"> 
+                            <div id="date-selector" class="flex space-x-4 p-2"> 
+                                </div>
                         </div>
+                        <button id="scroll-right-btn" onclick="scrollDatesRight()" class="flex-shrink-0 p-2 rounded-full bg-dark-card hover:bg-gray-700 text-white disabled:opacity-30 transition">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="movie-list" class="grid grid-cols-1 gap-8">
+                    <div id="loading-indicator" class="col-span-full flex justify-center items-center py-20">
+                        <div class="spinner w-10 h-10 border-4 rounded-full border-gray-700"></div>
+                        <p class="ml-4 text-xl text-gray-500">Loading showtimes from ticketing feed...</p>
+                    </div>
                 </div>
 
-                <button id="scroll-right-btn" onclick="scrollDatesRight()" class="flex-shrink-0 p-2 rounded-full bg-dark-card hover:bg-gray-700 text-white disabled:opacity-30 transition">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
-            </div>
-        </div>
-        
-        <div id="movie-list" class="grid grid-cols-1 gap-8">
-            <div id="loading-indicator" class="col-span-full flex justify-center items-center py-20">
-                <div class="spinner w-10 h-10 border-4 rounded-full border-gray-700"></div>
-                <p class="ml-4 text-xl text-gray-500">Loading showtimes from ticketing feed...</p>
-            </div>
-        </div>
-
-        <div id="trailer-modal" class="fixed inset-0 bg-black bg-opacity-90 hidden items-center justify-center p-4 z-50 transition-opacity duration-300" 
-             onclick="closeTrailerModal()">
-            <div class="bg-dark-card rounded-xl shadow-2xl w-full max-w-4xl h-[80vh] relative" onclick="event.stopPropagation()">
-                <button onclick="closeTrailerModal()" class="absolute top-0 right-0 m-3 text-white text-4xl leading-none z-50 opacity-75 hover:opacity-100 transition">
-                    ×
-                </button>
-                
-                <div id="trailer-modal-content" class="w-full h-full">
+                <div id="trailer-modal" class="fixed inset-0 bg-black bg-opacity-90 hidden items-center justify-center p-4 z-50 transition-opacity duration-300" 
+                     onclick="closeBookingModal()">
+                    <div class="bg-dark-card rounded-xl shadow-2xl w-full max-w-4xl h-[80vh] relative" onclick="event.stopPropagation()">
+                        <button onclick="closeBookingModal()" class="absolute top-0 right-0 m-3 text-white text-4xl leading-none z-50 opacity-75 hover:opacity-100 transition">
+                            ×
+                        </button>
+                        <div id="trailer-modal-content" class="w-full h-full"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-4 bg-dark-card/90 flex justify-center border-t border-purple-main">
+                            <button id="book-tickets-from-trailer" onclick="window.open(this.dataset.bookingUrl, '_blank'); closeBookingModal();"
+                                class="w-full sm:w-1/2 px-8 py-3 bg-purple-main rounded-lg text-white font-bold uppercase hover:bg-purple-darker transition duration-200 shadow-xl">
+                                BOOK TICKETS NOW
+                            </button>
+                        </div>
                     </div>
-            </div>
-        </div>
+                </div>
+            </main>
+        </section>
 
-        <div id="message-box" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center p-4 z-20">
-            <div class="bg-dark-card p-6 rounded-xl shadow-2xl max-w-sm w-full border-t-4 border-purple-main">
-                <h3 id="message-title" class="text-2xl font-bold text-white mb-3"></h3>
-                <p id="message-content" class="text-secondary-light mb-4"></p>
-                <button onclick="document.getElementById('message-box').classList.add('hidden');"
-                        class="w-full py-2 bg-purple-main rounded-lg text-white font-semibold hover:bg-purple-darker transition duration-150">
-                    Close
-                </button>
-            </div>
-        </div>
-
-    </main>
-
-    <footer class="bg-dark-cinematic border-t border-gray-800 py-10 md:py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            
-            <div class="mb-8 flex justify-center">
-                <img src="./Theatre logo.webp" alt="Park Theatre High Prairie Logo" class="footer-logo">
-            </div>
-
-            <div class="space-y-6">
-                <a 
-                    href="https://www.google.com/maps/dir/?api=1&destination=4921+52+Ave,+High+Prairie,+AB+T0G+1E0" 
-                    target="_blank" 
-                    class="flex flex-col items-center text-gray-300 hover:text-purple-main transition-colors duration-200 group"
-                    title="Get Directions on Google Maps"
-                >
-                    <i class="fas fa-map-marker-alt text-purple-main text-3xl mb-2 group-hover:text-white transition-colors duration-200"></i>
-                    <span class="text-lg font-semibold text-white group-hover:text-purple-main transition-colors duration-200 uppercase">High Prairie</span>
-                    <span class="text-base text-gray-400 mt-1">4921 52 Ave, High Prairie, AB T0G 1E0</span>
-                </a>
-
-                <a href="tel:+17805233466" class="flex items-center justify-center text-gray-300 hover:text-purple-main transition-colors duration-200">
-                    <i class="fas fa-phone text-purple-main text-2xl mr-3"></i>
-                    <span class="text-lg font-semibold text-white">(780) 523 3466</span>
-                </a>
+        <section id="rental-content" class="content-section hidden">
+            <div class="text-center py-12">
+                <h2 class="text-5xl font-extrabold text-white mb-4 uppercase">Host Your Private Event</h2>
+                <p class="text-lg text-purple-main mb-12 max-w-4xl mx-auto">
+                    The perfect venue for birthdays, field trips, private screenings, and corporate functions.
+                </p>
                 
-                <a href="mailto:Parktheatrehp@gmail.com" class="flex items-center justify-center text-gray-300 hover:text-purple-main transition-colors duration-200">
-                    <i class="fas fa-envelope text-purple-main text-2xl mr-3"></i>
-                    <span class="text-lg font-semibold text-white">Parktheatrehp@gmail.com</span>
-                </a>
-            </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+                    
+                    <div class="bg-dark-card p-6 rounded-xl shadow-2xl border border-gray-700">
+                        <i class="fas fa-birthday-cake text-purple-main text-4xl mb-4"></i>
+                        <h3 class="text-2xl font-bold text-white mb-2">Birthday Parties & Celebrations</h3>
+                        <p class="text-gray-300">Celebrate birthdays with a private movie showing of your choice on the big screen! Enjoy private access to our venue, dedicated seating, and special deals on popcorn and drinks.</p>
+                    </div>
+                    
+                    <div class="bg-dark-card p-6 rounded-xl shadow-2xl border border-gray-700">
+                        <i class="fas fa-graduation-cap text-purple-main text-4xl mb-4"></i>
+                        <h3 class="text-2xl font-bold text-white mb-2">School Field Trips & Group Viewings</h3>
+                        <p class="text-gray-300">Offer an exciting field trip experience! We accommodate large group sizes and can coordinate educational or recreational viewings during off-hours with special discounted rates.</p>
+                    </div>
 
-            <div class="flex justify-center space-x-6 my-10 border-t border-b border-gray-700 py-6">
-                <a href="https://www.facebook.com/Park.Theatre.High.Prairie/" target="_blank" 
-                   class="w-12 h-12 flex items-center justify-center bg-purple-main rounded-full text-white text-2xl 
-                          hover:bg-purple-darker transform hover:scale-110 transition duration-300 shadow-lg"
-                   title="Visit us on Facebook">
-                    <i class="fab fa-facebook-f"></i>
-                </a>
-                <a href="https://www.instagram.com/park_theatre?igshid=OGQ5ZDc2ODk2ZA%3D%3D" target="_blank" 
-                   class="w-12 h-12 flex items-center justify-center bg-purple-main rounded-full text-white text-2xl 
-                          hover:bg-purple-darker transform hover:scale-110 transition duration-300 shadow-lg"
-                   title="Visit us on Instagram">
-                    <i class="fab fa-instagram"></i>
-                </a>
-            </div>
+                    <div class="bg-dark-card p-6 rounded-xl shadow-2xl border border-gray-700">
+                        <i class="fas fa-handshake text-purple-main text-4xl mb-4"></i>
+                        <h3 class="text-2xl font-bold text-white mb-2">Corporate & Exclusive Private Rentals</h3>
+                        <p class="text-gray-300">Rent the entire venue for presentations, corporate training, team appreciation events, or unique product launches. You get full access to our screen and audio/visual equipment for your exclusive event.</p>
+                    </div>
+                </div>
 
-            <div class="text-gray-500 text-sm">
-                <p>© <span id="current-year">2025</span> Park Theatre. All rights reserved.</p>
-                <p class="mt-1">Design by Park Theatre | Data provided by external ticketing feed.</p>
+                <a href="#" onclick="showSection('contact-content', document.getElementById('nav-contact'))" class="inline-block mt-10 px-8 py-3 bg-purple-main text-white text-lg font-bold rounded-lg shadow-xl hover:bg-purple-darker transition duration-200 uppercase">
+                    Inquire About Rentals Now
+                </a>
             </div>
-            <script>
-                document.getElementById('current-year').textContent = new Date().getFullYear();
-            </script>
+        </section>
+
+        <section id="contact-content" class="content-section hidden">
+            <div class="max-w-xl mx-auto pt-8">
+                <h2 class="text-5xl font-extrabold text-white mb-3 uppercase tracking-wider text-center">Contact Us</h2>
+                <p class="text-lg font-extrabold text-purple-main mb-10 uppercase tracking-wider text-center">We're Here to Help You!</p>
+
+                <div class="bg-dark-card p-8 rounded-xl shadow-2xl border border-gray-800 space-y-6 mb-10">
+                    <h3 class="text-2xl font-bold text-white border-b border-gray-700 pb-3 text-center">Our Information</h3>
+
+                    <a href="http://googleusercontent.com/maps.google.com/8" target="_blank" class="flex items-center justify-center text-gray-300 hover:text-purple-main transition-colors group">
+                        <i class="fas fa-map-marker-alt text-purple-main text-xl w-6"></i>
+                        <span class="ml-3">4921 52 Ave, High Prairie, AB T0G 1E0</span>
+                    </a>
+                    <a href="tel:+17805233466" class="flex items-center justify-center text-gray-300 hover:text-purple-main transition-colors">
+                        <i class="fas fa-phone text-purple-main text-xl w-6"></i>
+                        <span class="ml-3">(780) 523 3466</span>
+                    </a>
+                    <a href="mailto:Parktheatrehp@gmail.com" class="flex items-center justify-center text-gray-300 hover:text-purple-main transition-colors">
+                        <i class="fas fa-envelope text-purple-main text-xl w-6"></i>
+                        <span class="ml-3">Parktheatrehp@gmail.com</span>
+                    </a>
+                </div>
+
+                <div class="bg-dark-card p-6 rounded-xl shadow-2xl border border-gray-800">
+                    <p class="text-lg font-bold text-white mb-4 text-center">Send Us a Message</p>
+                    <form 
+                        action="https://docs.google.com/forms/d/e/1FAIpQLSfvbMwSjX8TJY7T5fzEOUO044yGAzkAXQBU5J-PlgDJ2ZVgnw/formResponse" 
+                        method="POST" 
+                        target="google-form-target" 
+                        class="space-y-4"
+                        onsubmit="handleFormSubmission(); return false;" 
+                        id="contact-form"
+                    >
+                        <div class="space-y-4 sm:flex sm:space-x-4 sm:space-y-0">
+                            <input type="text" name="entry.301921969" placeholder="Your Name" id="form-name" required 
+                                   class="w-full p-3 rounded-lg bg-dark-input text-white border border-gray-700 placeholder-gray-700 focus:ring-purple-main focus:border-purple-main transition">
+                            <input type="email" name="entry.55824545" placeholder="Your Email" id="form-email" required 
+                                   class="w-full p-3 rounded-lg bg-dark-input text-white border border-gray-700 placeholder-gray-700 focus:ring-purple-main focus:border-purple-main transition">
+                        </div>
+                        <textarea name="entry.497138322" rows="5" placeholder="Your Message" id="form-message" required 
+                                  class="w-full p-3 rounded-lg bg-dark-input text-white border border-gray-700 placeholder-gray-700 focus:ring-purple-main focus:border-purple-main transition"></textarea>
+
+                        <button type="submit"
+                                class="w-full py-3 bg-purple-main rounded-lg text-white font-extrabold uppercase hover:bg-purple-darker transition duration-150 shadow-md">
+                            Send Message
+                        </button>
+                    </form>
+                    <p class="text-xs text-gray-400 mt-4 text-center" id="form-status-message">
+                        Your message will be sent securely via Google Forms.
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="social-content" class="content-section hidden">
+            <div class="text-center py-12">
+                <h2 class="text-5xl font-extrabold text-white mb-3 uppercase tracking-wider">Stay Connected</h2>
+                <p class="text-lg font-extrabold text-purple-main mb-12 uppercase tracking-wider">Follow the Magic!</p>
+
+                <div class="flex justify-center space-x-10">
+                    <a href="https://www.facebook.com/Park.Theatre.High.Prairie/" target="_blank" 
+                       class="w-20 h-20 flex flex-col items-center justify-center bg-purple-main rounded-full text-white text-3xl 
+                              hover:bg-purple-darker transform hover:scale-105 transition duration-300 shadow-lg"
+                       title="Visit us on Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                        <span class="text-xs font-semibold mt-1">Facebook</span>
+                    </a>
+                    <a href="https://www.instagram.com/park_theatre?igshid=OGQ5ZDc2ODk2ZA%3D%3D" target="_blank" 
+                       class="w-20 h-20 flex flex-col items-center justify-center bg-purple-main rounded-full text-white text-3xl 
+                              hover:bg-purple-darker transform hover:scale-105 transition duration-300 shadow-lg"
+                       title="Visit us on Instagram">
+                        <i class="fab fa-instagram"></i>
+                        <span class="text-xs font-semibold mt-1">Instagram</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </div><footer class="bg-dark-cinematic border-t border-gray-800 py-6 text-center">
+        <div class="max-w-7xl mx-auto px-4 text-gray-500 text-sm">
+            <p>© <span id="current-year">2025</span> Park Theatre. All rights reserved.</p>
         </div>
     </footer>
 
@@ -266,7 +338,6 @@
         const API_ENDPOINT = '/api/movies'; 
         const MOVIE_LIST_EL = document.getElementById('movie-list');
         const DATE_SELECTOR_EL = document.getElementById('date-selector');
-        const DATE_SCROLL_CONTAINER = document.getElementById('date-scroll-container');
         const SCROLL_LEFT_BTN = document.getElementById('scroll-left-btn');
         const SCROLL_RIGHT_BTN = document.getElementById('scroll-right-btn');
         const LOADING_EL = document.getElementById('loading-indicator');
@@ -278,32 +349,81 @@
         let allMovies = [];
         let availableDates = [];
         let activeDate = null;
-        let dateWindowStart = 0; // Index of the first date currently displayed
+        let dateWindowStart = 0;
 
-        // --- UTILITY FUNCTIONS ---
+        // --- SPA NAVIGATION LOGIC ---
 
-        /**
-         * Converts 24-hour time string (HH:MM:SS) to 12-hour format (h:mm AM/PM).
-         */
-        function formatTime12hr(time24) {
-            if (!time24 || time24 === 'None') return 'N/A';
-            try {
-                // We only care about HH:MM
-                const [hours24, minutes] = time24.split(':');
-                let hours = parseInt(hours24, 10);
-                const ampm = hours >= 12 ? 'PM' : 'AM';
-                hours = hours % 12;
-                hours = hours ? hours : 12; // The hour '0' should be '12'
-                
-                return `${hours}:${minutes} ${ampm}`;
-            } catch {
-                return time24;
+        const SECTIONS = ['now-playing-content', 'rental-content', 'contact-content', 'social-content'];
+
+        function showSection(sectionId, clickedElement) {
+            
+            // Hide all sections
+            SECTIONS.forEach(id => {
+                const section = document.getElementById(id);
+                if (section) section.classList.add('hidden');
+            });
+
+            // Show the requested section
+            const sectionToShow = document.getElementById(sectionId);
+            if (sectionToShow) sectionToShow.classList.remove('hidden');
+            
+            // Highlight active link
+            document.querySelectorAll('nav a').forEach(a => a.classList.remove('text-purple-main'));
+            if (clickedElement) clickedElement.classList.add('text-purple-main');
+
+            // If switching back to Now Playing, fetch movies if not already loaded
+            if (sectionId === 'now-playing-content' && allMovies.length === 0) {
+                fetchMovies(); 
             }
         }
         
-        /**
-         * Converts minutes into "Xh Ym" format.
-         */
+        // --- FORM SUBMISSION LOGIC (SILENT GOOGLE FORMS) ---
+        
+        function handleFormSubmission() {
+            // Display submitting message immediately
+            document.getElementById('form-status-message').innerHTML = '<span class="text-purple-main">Sending message...</span>';
+            
+            // Submit form programmatically to the hidden iframe target
+            document.getElementById('contact-form').submit(); 
+            
+            setTimeout(function() {
+                document.getElementById('contact-form').reset(); 
+                document.getElementById('form-status-message').innerHTML = '<span class="text-green-400">Thank you! Your message has been sent successfully.</span>';
+                
+            }, 1000); 
+
+            // Stop the browser from attempting to navigate away from the page
+            return false; 
+        }
+
+        // --- UTILITY FUNCTIONS (ALL CRITICAL UTILITY FUNCTIONS INCLUDED) ---
+        
+        function closeBookingModal() {
+            TRAILER_MODAL.classList.remove('flex');
+            TRAILER_MODAL.classList.add('hidden');
+            TRAILER_MODAL_CONTENT.innerHTML = '';
+            document.getElementById('book-tickets-from-trailer').removeAttribute('data-booking-url');
+        }
+        
+        function openBookingModal(url, bookingUrl) {
+            if (url.includes('youtube.com/embed')) {
+                const iframeHTML = `<iframe class="w-full h-full rounded-xl" src="${url}" frameborder="0" allow="autoplay; encrypted-media; gyroscope;" allowfullscreen></iframe>`;
+                TRAILER_MODAL_CONTENT.innerHTML = iframeHTML;
+                document.getElementById('book-tickets-from-trailer').setAttribute('data-booking-url', bookingUrl);
+                TRAILER_MODAL.classList.remove('hidden');
+                TRAILER_MODAL.classList.add('flex');
+            } else {
+                window.open(url, '_blank');
+            }
+        }
+
+        function getDateStringLocal(dateObj) {
+            const year = dateObj.getFullYear();
+            const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const day = String(dateObj.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+        
         function formatRuntime(minutes) {
             if (!minutes || isNaN(parseInt(minutes))) return 'N/A';
             const totalMinutes = parseInt(minutes, 10);
@@ -315,107 +435,51 @@
             return `${m}m`;
         }
 
-
-        function displayMessage(title, content) {
-            document.getElementById('message-title').textContent = title;
-            document.getElementById('message-content').textContent = content;
-            document.getElementById('message-box').classList.remove('hidden');
-            document.getElementById('message-box').classList.add('flex');
+        function formatTime12hr(time24) {
+             if (!time24 || time24 === 'None') return 'N/A';
+            try {
+                const [hours24, minutes] = time24.split(':');
+                let hours = parseInt(hours24, 10);
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12;
+                hours = hours ? hours : 12;
+                return `${hours}:${minutes} ${ampm}`;
+            } catch {
+                return time24;
+            }
         }
 
-        /**
-         * Opens the trailer in a modal window.
-         */
-        function openTrailerModal(youtubeId) {
-            if (!youtubeId) return;
-            const embedUrl = youtubeId.includes('youtube.com/embed') ? youtubeId : `https://www.youtube.com/embed/${youtubeId}`;
-
-            TRAILER_MODAL_CONTENT.innerHTML = `
-                <iframe 
-                    class="w-full h-full rounded-xl" 
-                    src="${embedUrl}?autoplay=1" 
-                    frameborder="0" 
-                    allow="autoplay; encrypted-media; gyroscope;" 
-                    allowfullscreen
-                ></iframe>
-            `;
-            TRAILER_MODAL.classList.remove('hidden');
-            TRAILER_MODAL.classList.add('flex');
-        }
-
-        /**
-         * Closes the trailer modal and stops video playback.
-         */
-        function closeTrailerModal() {
-            TRAILER_MODAL.classList.remove('flex');
-            TRAILER_MODAL.classList.add('hidden');
-            // Stop video playback by clearing the iframe content
-            TRAILER_MODAL_CONTENT.innerHTML = '';
-        }
-
-        /**
-         * Calculates and returns the standardized YYYY-MM-DD date string for a given Date object (local time).
-         */
-        function getDateStringLocal(dateObj) {
-            const year = dateObj.getFullYear();
-            const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-            const day = String(dateObj.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
-        }
-        
-        /**
-         * Converts date string (YYYY-MM-DD) to a formatted string.
-         * Includes robust "Today" and "Tomorrow" detection using consistent local date strings.
-         */
         function formatDate(dateStr, includeDay = false) {
             if (!dateStr || dateStr === 'None' || dateStr === 'N/A') return 'TBA';
             try {
-                // Get today's and tomorrow's date strings using local components
                 const now = new Date();
                 const todayDateString = getDateStringLocal(now); 
-                
                 const tomorrow = new Date(now);
                 tomorrow.setDate(now.getDate() + 1);
                 const tomorrowDateString = getDateStringLocal(tomorrow);
                 
-                // 1. Robust Labeling
                 if (includeDay) {
-                    if (dateStr === todayDateString) {
-                        return 'Today';
-                    }
-                    if (dateStr === tomorrowDateString) {
-                        return 'Tomorrow';
-                    }
+                    if (dateStr === todayDateString) return 'Today';
+                    if (dateStr === tomorrowDateString) return 'Tomorrow';
                 }
 
-                // 2. Format the date object for display
-                // Construct date using the string and 'T00:00:00' to ensure consistent local parsing
                 const dateObj = new Date(dateStr + 'T00:00:00'); 
-                
                 let options = { month: 'short', day: 'numeric' };
-                if (includeDay) {
-                    options = { weekday: 'short', month: 'short', day: 'numeric' };
-                }
+                if (includeDay) options = { weekday: 'short', month: 'short', day: 'numeric' };
                 
-                // Ensure correct formatting for standard days, removing the comma.
                 return dateObj.toLocaleDateString('en-US', options).replace(/,/, ''); 
-
             } catch {
                 return dateStr;
             }
         }
-        
-        // --- DATE SCROLLING LOGIC ---
 
         function updateScrollButtons() {
             SCROLL_LEFT_BTN.disabled = dateWindowStart === 0;
-            // The DATES_PER_VIEW is 6, so if we're at index N, and the length is N+1, the button is disabled.
             SCROLL_RIGHT_BTN.disabled = dateWindowStart + DATES_PER_VIEW >= availableDates.length;
         }
 
         function scrollDatesLeft() {
             if (dateWindowStart > 0) {
-                // Scroll one date at a time for smooth browsing
                 dateWindowStart = Math.max(0, dateWindowStart - 1); 
                 renderDateSelector();
             }
@@ -423,16 +487,12 @@
 
         function scrollDatesRight() {
             if (dateWindowStart + DATES_PER_VIEW < availableDates.length) {
-                // Scroll one date at a time for smooth browsing
                 dateWindowStart = Math.min(availableDates.length - DATES_PER_VIEW, dateWindowStart + 1); 
                 renderDateSelector();
             }
         }
 
 
-        /**
-         * Renders the dates currently visible within the scrolling window.
-         */
         function renderDateSelector() {
             if (availableDates.length === 0) {
                 DATE_SELECTOR_EL.innerHTML = '';
@@ -444,29 +504,21 @@
 
             DATE_SELECTOR_EL.innerHTML = datesToDisplay.map(dateStr => {
                 const isSelected = dateStr === activeDate;
-                
-                // Get the day of the week (handles 'Today'/'Tomorrow')
                 const formattedDate = formatDate(dateStr, true);
-                
-                // Split the formatted date into parts for display
                 const dayParts = formattedDate.split(' '); 
-                
-                // Determine the day label (TODAY, TOMORROW, or Weekday)
                 let dayLabel, dayNum, monthLabel;
 
-                if (dayParts.length === 1) { // TODAY or TOMORROW
+                if (dayParts.length === 1) { 
                     dayLabel = dayParts[0].toUpperCase();
-                    // Fall back to standard format for number/month
                     const standardParts = formatDate(dateStr).split(' ');
                     dayNum = standardParts.length > 1 ? standardParts[1] : ''; 
                     monthLabel = standardParts.length > 0 ? standardParts[0].toUpperCase() : '';
-                } else { // Standard Day (e.g., Fri Sep 27)
+                } else { 
                     dayLabel = dayParts[0].toUpperCase();
                     monthLabel = dayParts[1].toUpperCase();
                     dayNum = dayParts[2];
                 }
 
-                // Added flex-none to ensure buttons stay sized correctly inside the scroller
                 return `
                     <button 
                         class="date-selector-btn flex-none w-24 py-2 rounded-xl text-center transition duration-150 
@@ -484,108 +536,76 @@
             updateScrollButtons();
         }
 
-        // --- MOVIE RENDERING LOGIC ---
-
-        /**
-         * Renders the list of all movie cards based on the activeDate.
-         */
         function renderMovieList() {
-            // Render the global date selector first (to set active classes)
             renderDateSelector();
             
-            // --- FILTERING LOGIC: Only render movies with showtimes on the activeDate ---
             const filteredMovies = allMovies.filter(movie => {
                 const showtimes = movie.showtimesByDate[activeDate];
                 return showtimes && showtimes.length > 0;
             });
 
             if (filteredMovies.length === 0) {
-                 MOVIE_LIST_EL.innerHTML = `
-                    <div class="col-span-full p-8 text-center bg-dark-card rounded-xl">
-                        <p class="text-xl text-white">No showtimes available for ${formatDate(activeDate, true)}.</p>
-                        <p class="mt-2 text-gray-500">Please select a different date above or check back tomorrow.</p>
-                    </div>
-                `;
-                return; // Stop rendering if no movies pass the filter
+                 if (document.getElementById('now-playing-content').classList.contains('hidden')) {
+                 } else {
+                     MOVIE_LIST_EL.innerHTML = `
+                         <div class="col-span-full p-8 text-center bg-dark-card rounded-xl">
+                             <p class="text-xl text-white">No showtimes available for ${formatDate(activeDate, true)}.</p>
+                             <p class="mt-2 text-gray-500">Please select a different date above or check back tomorrow.</p>
+                         </div>
+                     `;
+                 }
+                return;
             }
 
-            // Render the filtered list of movies
             MOVIE_LIST_EL.innerHTML = filteredMovies.map(movie => createMovieCard(movie)).join('');
         }
 
-        /**
-         * Generates the HTML for a single movie card.
-         */
         function createMovieCard(movie) {
-            const placeholderImageUrl = `https://placehold.co/180x270/111827/FFFFFF?text=${encodeURIComponent(movie.title || 'Movie Poster')}`;
+            const placeholderImageUrl = 'https://placehold.co/180x270/9333EA/FFFFFF?text=Poster+N/A';
             const imageSrc = movie.posterUrl || placeholderImageUrl;
             const currentShowtimes = movie.showtimesByDate[activeDate] || [];
             
-            // Parse YouTube ID (Handles both full URL and just the ID)
-            const youtubeId = movie.youtubeId ? (movie.youtubeId.includes('youtube.com') ? movie.youtubeId.split('/').pop().replace('embed/', '') : movie.youtubeId) : null;
+            const youtubeId = movie.youtubeId ? (movie.youtubeId.includes('youtube.com') ? movie.youtubeId.split('/').pop().replace('embed/', '') : youtubeId) : null;
             
-            // Get current date/time in the user's local timezone
             const now = new Date();
-            const todayDateString = getDateStringLocal(now); // Use reliable local date string
+            const todayDateString = getDateStringLocal(now); 
             const isToday = activeDate === todayDateString;
-
 
             const showtimeButtonsHTML = currentShowtimes.map(showtime => {
                 const displayTime = formatTime12hr(showtime.time);
                 let buttonClasses = 'bg-dark-input text-white hover:bg-purple-darker';
-                let titleText = `Screen: ${showtime.screen}`;
-                let buttonContent = displayTime;
-                let isClickable = true;
 
                 let showIsPast = false;
                 if (isToday) {
-                    // 1. Construct the show time string using the user's local browser timezone
                     const showDateTime = new Date(`${activeDate}T${showtime.time}`);
-                    
-                    // 2. Check if the current time is 45 minutes past the show time (FIX)
                     const CUTOFF_MS = 45 * 60 * 1000;
                     if (now.getTime() > showDateTime.getTime() + CUTOFF_MS) { 
                         showIsPast = true;
                     }
                 }
 
-                // --- RENDERING LOGIC ---
-
                 if (showIsPast) {
-                    // 1. Show has passed (Priority 1)
                     buttonClasses = 'bg-gray-800 text-red-400 cursor-not-allowed';
-                    titleText = `Screen: ${showtime.screen} | SHOW STARTED`; // Text updated to ALL CAPS
-                    buttonContent = 'SHOW STARTED';
-                    isClickable = false;
                     
-                    // Rectangular button shape (rounded-md)
-                    return `<span class="${buttonClasses} text-base font-semibold px-4 py-2 rounded-md cursor-not-allowed" title="${titleText}">${buttonContent}</span>`;
+                    return `<span class="${buttonClasses} text-base font-semibold px-4 py-2 rounded-md cursor-not-allowed" title="SHOW STARTED">SHOW STARTED</span>`;
                 } 
                 
                 if (showtime.soldOutLevel === 'S') {
-                    // 2. Sold Out (Priority 2)
                     buttonClasses = 'bg-soldout-gray text-gray-400 cursor-not-allowed line-through';
-                    titleText = `Screen: ${showtime.screen} | SOLD OUT`; // Text updated to ALL CAPS
-                    buttonContent = 'SOLD OUT';
-                    isClickable = false;
                     
-                    // Rectangular button shape (rounded-md)
-                    return `<span class="${buttonClasses} text-base font-semibold px-4 py-2 rounded-md cursor-not-allowed" title="${titleText}">${buttonContent}</span>`;
+                    return `<span class="${buttonClasses} text-base font-semibold px-4 py-2 rounded-md cursor-not-allowed" title="SOLD OUT">SOLD OUT</span>`;
                 } 
                 
                 if (showtime.soldOutLevel === 'W') {
-                    // 3. Limited Availability
                     buttonClasses = 'bg-warning-orange text-white hover:bg-orange-600';
-                    titleText = `Screen: ${showtime.screen} | LIMITED SEATS`; // Text updated to ALL CAPS
                 }
 
-                // 4. Available (Default/Final State)
                 return `
                     <a href="${showtime.bookingUrl}" target="_blank"
                         class="${buttonClasses} text-base font-semibold px-4 py-2 rounded-md transition duration-150 shadow-md whitespace-nowrap"
-                        title="Book tickets for ${showtime.screen}"
+                        title="Book tickets for ${showtime.screen} - Opens in new tab"
                     >
-                        ${buttonContent}
+                        ${displayTime}
                     </a>
                 `;
             }).join('');
@@ -593,13 +613,13 @@
             return `
                 <div class="grid grid-cols-1 md:grid-cols-5 bg-dark-card rounded-xl shadow-xl overflow-hidden border border-gray-800">
                     
-                    <div class="col-span-1 relative p-4 bg-dark-input flex justify-center items-center poster-frame" style="min-height: 350px;">
+                    <div class="col-span-1 relative p-4 bg-dark-input flex justify-center md:justify-start items-center poster-frame" style="min-height: 350px;">
                         <img src="${imageSrc}" alt="Poster for ${movie.title}" 
-                             class="rounded-lg shadow-3xl-dark transition duration-300 hover:scale-[1.05] hover:shadow-purple-glow" 
+                             class="rounded-lg shadow-3xl-dark transition duration-300 hover:scale-[1.05] hover:shadow-purple-glow max-w-full md:max-w-[80%]" 
                              onerror="this.onerror=null; this.src='${placeholderImageUrl}';">
                     </div>
 
-                    <div class="md:col-span-3 p-6 flex flex-col justify-center">
+                    <div class="col-span-1 md:col-span-3 p-6 flex flex-col justify-center">
                         
                         <div class="flex items-center mb-2">
                              <span class="text-sm font-bold uppercase py-1.5 px-3 rounded-md border border-gray-600 text-gray-400 bg-gray-800 tracking-wider">
@@ -607,48 +627,39 @@
                             </span>
                         </div>
                         
-                        <h3 class="text-3xl font-extrabold text-white mb-2 uppercase">${movie.title || 'Untitled Movie'}</h3>
+                        <h3 class="text-2xl sm:text-3xl font-extrabold text-white mb-2 uppercase">${movie.title || 'Untitled Movie'}</h3>
                         
-                        <div class="flex flex-wrap gap-x-4 gap-y-1 text-sm font-medium text-gray-400 mb-4">
+                        <div class="flex flex-wrap gap-x-4 gap-y-1 text-xs sm:text-sm font-medium text-gray-400 mb-4">
                             <span>Runtime: ${formatRuntime(movie.runningTime)}</span> 
                             <span>| Dir: ${movie.directors || 'N/A'}</span>
                             <span>| Starring: ${movie.actors || 'N/A'}</span>
                         </div>
-                        <p class="text-base text-gray-300">${movie.synopsis || 'Synopsis not available.'}</p>
+                        <p class="text-sm sm:text-base text-gray-300">${movie.synopsis || 'Synopsis not available.'}</p>
                         
                         ${youtubeId ? `
-                            <button 
-                                class="mt-4 flex items-center space-x-2 w-full sm:w-48 px-4 py-2 bg-purple-main text-white text-sm font-bold rounded-lg 
-                                       shadow-lg hover:bg-purple-darker transition duration-200 justify-center"
-                                onclick="openTrailerModal('${youtubeId}')"
-                                title="Watch Trailer"
-                            >
+                            <button type="button" onclick="openBookingModal('https://www.youtube.com/embed/${youtubeId}?autoplay=1', '${currentShowtimes?.[0]?.bookingUrl || '#'}')"
+                                class="mt-4 flex items-center space-x-2 w-full sm:w-48 px-4 py-2 bg-purple-main rounded-lg text-white font-bold uppercase hover:bg-purple-darker transition duration-200 shadow-xl">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 4l15 8-15 8z"/></svg>
                                 <span>WATCH TRAILER</span>
                             </button>
                         ` : ''}
                     </div>
 
-                    <div class="md:col-span-1 p-6 flex flex-col justify-start border-t border-gray-800 md:border-t-0 md:border-l">
+                    <div class="col-span-1 md:col-span-1 p-6 flex flex-col justify-start border-t border-gray-800 md:border-t-0 md:border-l">
                         <h4 class="text-xl font-bold text-white mb-3 uppercase tracking-wider">SHOWTIMES</h4>
                         <div class="flex flex-wrap gap-2 overflow-y-auto"> 
                             ${showtimeButtonsHTML}
                         </div>
-                        <p class="text-xs text-gray-500 mt-4">Click any time to purchase tickets.</p>
+                        <p class="text-xs text-gray-500 mt-4">Tickets open in a new tab.</p>
                     </div>
 
                 </div>
             `;
         }
         
-        /**
-         * Handles selecting a new date, updates activeDate, and re-renders the list.
-         */
         function selectDate(newDate) {
-            // Check if the date is already active to prevent unnecessary re-rendering
             if (newDate === activeDate) return; 
 
-            // Remove active class from old button and add to new
             const oldBtn = document.querySelector(`.active-date`);
             if (oldBtn) oldBtn.classList.remove('active-date');
 
@@ -659,69 +670,62 @@
             renderMovieList();
         }
 
-        /**
-         * Fetches the clean JSON list of movies from the local Python proxy.
-         */
         async function fetchMovies() {
-            LOADING_EL.classList.remove('hidden');
+            const API_ENDPOINT = '/api/movies'; 
+            
+            if (document.getElementById('loading-indicator').classList.contains('hidden')) {
+                return;
+            }
+            
+            document.getElementById('loading-indicator').classList.remove('hidden');
             
             try {
                 const response = await fetch(API_ENDPOINT);
                 
                 if (!response.ok) {
-                    throw new Error(`Proxy status: ${response.status}. Ensure the Python server is running and the XML is valid.`);
+                    throw new Error(`Proxy status: ${response.status}.`);
                 }
                 
                 allMovies = await response.json();
                 
-                // 1. Determine all available dates across all movies
                 const dateSet = new Set();
                 allMovies.forEach(movie => {
                     Object.keys(movie.showtimesByDate).forEach(date => dateSet.add(date));
                 });
                 
-                // Sort dates chronologically
                 let dates = Array.from(dateSet).sort();
                 
-                // 2. Filter out past dates 
                 const now = new Date();
-                const todayDateString = getDateStringLocal(now); // Use reliable local date string
+                const todayDateString = getDateStringLocal(now);
                 
-                // Filter to keep today and future dates
                 availableDates = dates.filter(dateStr => dateStr >= todayDateString);
                 
-                // 3. Set the active date to the first available date (Today or first future date)
                 if (availableDates.length > 0) {
                     activeDate = availableDates[0];
-                    // Also ensure the window starts at the current day if possible
                     dateWindowStart = 0; 
                 }
                 
-                // 4. Render the full UI
                 renderMovieList();
 
             } catch (error) {
-                console.error("Failed to load or parse movie data:", error);
+                console.error("Failed to load movie data:", error);
                 
-                MOVIE_LIST_EL.innerHTML = `
+                document.getElementById('movie-list').innerHTML = `
                     <div class="col-span-full p-8 text-center bg-dark-card rounded-xl">
                         <p class="text-xl text-accent-purple">Data Retrieval Failed</p>
                         <p class="mt-2 text-gray-400">Error: ${error.message}</p>
                         <p class="mt-4 text-sm text-gray-500">Please ensure 'proxy_server.py' is actively running in your command line.</p>
                     </div>
                 `;
-                displayMessage(
-                    "Data Error: Check Server Console",
-                    `Could not load movies. Please ensure your Python proxy script is running and connected to the ticketing feed.`
-                );
-
             } finally {
-                LOADING_EL.classList.add('hidden');
+                document.getElementById('loading-indicator').classList.add('hidden');
             }
         }
 
-        // --- Initialize the App ---
-        window.onload = fetchMovies;
+        window.onload = function() {
+            fetchMovies();
+            document.getElementById('nav-now-playing').classList.add('text-purple-main');
+        };
 
     </script>
 </body>

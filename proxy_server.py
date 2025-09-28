@@ -19,7 +19,7 @@ def extract_youtube_id(url):
     if not url or url.lower() == 'none':
         return None
     # Matches /embed/VIDEO_ID or watch?v=VIDEO_ID
-    match = re.search(r'(?:youtube\.com\/(?:embed\/|v\/|watch\?v=)|youtu\.be\/|embed\/)([\w-]+)', url)
+    match = re.search(r'(?:youtube\.com\/(?:embed\/|v\/(?:watch\?v=))|youtu\.be\/|embed\/)([\\w-]+)', url)
     return match.group(1) if match else None
 
 def get_text(element, tag):
@@ -45,8 +45,7 @@ def extract_and_format_data(xml_data):
 
             youtube_url = get_text(film_el, 'Youtube')
             
-            # FIX: Prioritize larger poster sizes first (Img_10 or Img_5) 
-            # and fall back to smaller app/web sizes if the others are missing.
+            # Use the higher-resolution tags we discussed (Img_10, Img_5) as preferred options
             high_res_poster = get_text(film_el, 'Img_10') or get_text(film_el, 'Img_5')
             fallback_poster = get_text(film_el, 'Img_app') or get_text(film_el, 'Img_1s')
             
@@ -64,7 +63,7 @@ def extract_and_format_data(xml_data):
                 'actors': get_text(film_el, 'Actors'),
                 'startDate': get_text(film_el, 'StartDate'),
                 'endDate': get_text(film_el, 'EndDate'),
-                'posterUrl': final_poster_url, # Use the prioritized URL
+                'posterUrl': final_poster_url, 
                 'youtubeId': extract_youtube_id(youtube_url),
                 'showtimesByDate': {},
             }
@@ -120,15 +119,15 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
             print(f"--- Proxying request to: {EXTERNAL_API_URL} ---")
             
             try:
-                # Ensure permissive SSL context creation
+                # CRITICAL: Use the highly permissive SSL context for reliable fetching
                 context = ssl._create_unverified_context()
                 
-                # Fetch data from the external URL
+                # Fetch data from the external URL with a timeout
                 try:
-                    with urllib.request.urlopen(EXTERNAL_API_URL, context=context, timeout=10) as response:
+                    with urllib.request.urlopen(EXTERNAL_API_URL, context=context, timeout=15) as response:
                         xml_data = response.read()
                 except urllib.error.URLError as url_e:
-                    raise ConnectionError(f"URL/Connection Error: {url_e}")
+                    raise ConnectionError(f"URL/Connection Error (SSL/DNS): {url_e}")
                 except Exception as net_e:
                     raise ConnectionError(f"General Network Error: {net_e}")
                 
@@ -178,10 +177,10 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
 
 def run_server():
     """Starts the Python HTTP server."""
-    # Use '0.0.0.0' for deployment to listen on all public interfaces
+    # Use '0.0.0.0' for deployment and dynamic port for Render, '' for local testing binding to localhost
     server_address = ('0.0.0.0', PORT) 
     httpd = http.server.HTTPServer(server_address, ProxyHandler)
-    print(f"\n--- Starting server on 0.0.0.0:{PORT} ---")
+    print(f"\n--- Starting server on 0.0.0.0:{PORT} ---\n")
     print(f"Access your website at: http://localhost:{PORT}/index.html (for local testing)")
     print("Press Ctrl+C to stop the server.")
     try:
