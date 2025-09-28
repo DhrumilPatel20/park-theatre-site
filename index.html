@@ -105,6 +105,17 @@
             padding-top: 0.5rem; /* py-2 */
             padding-bottom: 0.5rem; /* py-2 */
         }
+        /* Mobile menu styling */
+        .mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(12, 12, 22, 0.95); /* Dark cinematic with opacity */
+            z-index: 49; /* Below sticky header, above main content */
+            padding-top: 100px; /* Space for the fixed header */
+        }
     </style>
     <script>
         tailwind.config = {
@@ -153,10 +164,28 @@
                 </a>
             </nav>
             
-            <button class="md:hidden text-white text-xl">
-                <i class="fas fa-bars"></i>
+            <button class="md:hidden text-white text-xl" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars" id="mobile-menu-icon"></i>
             </button>
         </div>
+        
+        <div id="mobile-menu" class="mobile-menu-overlay hidden md:hidden">
+            <div class="flex flex-col items-center space-y-6 pt-10">
+                <a href="#" onclick="showSection('now-playing-content', document.getElementById('nav-now-playing-mobile')); toggleMobileMenu();" id="nav-now-playing-mobile" class="text-2xl text-white hover:text-purple-main transition duration-150 uppercase font-bold">
+                    Now Playing
+                </a>
+                <a href="#" onclick="showSection('rental-content', document.getElementById('nav-rental-mobile')); toggleMobileMenu();" id="nav-rental-mobile" class="text-2xl text-white hover:text-purple-main transition duration-150 uppercase font-bold">
+                    Rental
+                </a>
+                <a href="#" onclick="showSection('contact-content', document.getElementById('nav-contact-mobile')); toggleMobileMenu();" id="nav-contact-mobile" class="text-2xl text-white hover:text-purple-main transition duration-150 uppercase font-bold">
+                    Contact Us
+                </a>
+                <a href="#" onclick="showSection('social-content', document.getElementById('nav-social-mobile')); toggleMobileMenu();" id="nav-social-mobile" class="text-2xl text-white hover:text-purple-main transition duration-150 uppercase font-bold">
+                    Social Media
+                </a>
+            </div>
+        </div>
+        
     </header>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -256,7 +285,7 @@
                 <p class="text-lg font-extrabold text-purple-main mb-10 uppercase tracking-wider text-center">We're Here to Help You!</p>
 
                 <div class="bg-dark-card p-8 rounded-xl shadow-2xl border border-gray-800 space-y-6 mb-10">
-                    <h3 class="text-2xl font-bold text-white border-b border-gray-700 pb-3 text-center">Our Information</h3>
+                    <h3 class="text-2xl font-bold text-white border-b border-gray-700 pb-3 text-center uppercase">Our Information</h3>
 
                     <a href="http://googleusercontent.com/maps.google.com/8" target="_blank" class="flex items-center justify-center text-gray-300 hover:text-purple-main transition-colors group">
                         <i class="fas fa-map-marker-alt text-purple-main text-xl w-6"></i>
@@ -273,7 +302,7 @@
                 </div>
 
                 <div class="bg-dark-card p-6 rounded-xl shadow-2xl border border-gray-800">
-                    <p class="text-lg font-bold text-white mb-4 text-center">Send Us a Message</p>
+                    <p class="text-lg font-bold text-white mb-4 text-center uppercase">Send Us a Message</p>
                     <form 
                         action="https://docs.google.com/forms/d/e/1FAIpQLSfvbMwSjX8TJY7T5fzEOUO044yGAzkAXQBU5J-PlgDJ2ZVgnw/formResponse" 
                         method="POST" 
@@ -351,7 +380,7 @@
         let activeDate = null;
         let dateWindowStart = 0;
 
-        // --- SPA NAVIGATION LOGIC ---
+        // --- SPA NAVIGATION LOGIC (UPDATED) ---
 
         const SECTIONS = ['now-playing-content', 'rental-content', 'contact-content', 'social-content'];
 
@@ -374,6 +403,22 @@
             // If switching back to Now Playing, fetch movies if not already loaded
             if (sectionId === 'now-playing-content' && allMovies.length === 0) {
                 fetchMovies(); 
+            }
+        }
+        
+        // --- MOBILE MENU LOGIC ---
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuIcon = document.getElementById('mobile-menu-icon');
+        
+        function toggleMobileMenu() {
+            mobileMenu.classList.toggle('hidden');
+            // Change icon from hamburger to X
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileMenuIcon.classList.remove('fa-times');
+                mobileMenuIcon.classList.add('fa-bars');
+            } else {
+                mobileMenuIcon.classList.remove('fa-bars');
+                mobileMenuIcon.classList.add('fa-times');
             }
         }
         
