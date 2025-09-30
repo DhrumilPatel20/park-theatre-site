@@ -50,6 +50,23 @@
             .global-footer-layout .flex-col.items-start { align-items: center; }
             .global-footer-layout .text-right { text-align: center; }
         }
+        /* Popcorn Animation */
+        .popcorn-container { display: flex; justify-content: center; gap: 10px; }
+        .kernel {
+            width: 20px;
+            height: 20px;
+            background-color: #F5E0A9;
+            border-radius: 50% 50% 40% 40% / 60% 60% 40% 40%;
+            position: relative;
+            animation: pop 2s infinite ease-out;
+        }
+        @keyframes pop {
+            0%, 100% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+            20% { transform: translateY(-30px) scale(1.2) rotate(20deg); opacity: 1; }
+            40% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+            60% { transform: translateY(-15px) scale(1.1) rotate(-20deg); opacity: 1; }
+            80% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+        }
     </style>
     <script>
         tailwind.config = {
@@ -116,7 +133,6 @@
                         <p class="ml-4 text-xl text-gray-500">Loading showtimes from ticketing feed...</p>
                     </div>
                 </div>
-                
                 <div id="trailer-modal" class="fixed inset-0 bg-black bg-opacity-90 hidden grid place-items-center p-4 z-[60]" onclick="closeBookingModal()">
                     <div class="bg-dark-card rounded-xl shadow-2xl w-full max-w-4xl flex flex-col p-3 relative" onclick="event.stopPropagation()">
                         <button onclick="closeBookingModal()" class="absolute top-0 right-0 m-1 text-white text-3xl z-10">×</button>
@@ -131,21 +147,9 @@
                 <h2 class="text-5xl font-extrabold text-white mb-4 uppercase">Host Your Private Event</h2>
                 <p class="text-lg text-purple-main mb-12 max-w-4xl mx-auto">The perfect venue for birthdays, field trips, private screenings, and corporate functions.</p>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-                    <div class="bg-dark-card p-6 rounded-xl shadow-2xl border border-gray-700">
-                        <i class="fas fa-birthday-cake text-purple-main text-4xl mb-4"></i>
-                        <h3 class="text-2xl font-bold text-white mb-2">Birthday Parties & Celebrations</h3>
-                        <p class="text-gray-300">Celebrate birthdays with a private movie showing of your choice on the big screen! Enjoy private access to our venue, dedicated seating, and special deals on popcorn and drinks.</p>
-                    </div>
-                    <div class="bg-dark-card p-6 rounded-xl shadow-2xl border border-gray-700">
-                        <i class="fas fa-graduation-cap text-purple-main text-4xl mb-4"></i>
-                        <h3 class="text-2xl font-bold text-white mb-2">School Field Trips & Group Viewings</h3>
-                        <p class="text-gray-300">Offer an exciting field trip experience! We accommodate large group sizes and can coordinate educational or recreational viewings during off-hours with special discounted rates.</p>
-                    </div>
-                    <div class="bg-dark-card p-6 rounded-xl shadow-2xl border border-gray-700">
-                        <i class="fas fa-handshake text-purple-main text-4xl mb-4"></i>
-                        <h3 class="text-2xl font-bold text-white mb-2">Corporate & Exclusive Private Rentals</h3>
-                        <p class="text-gray-300">Rent the entire venue for presentations, corporate training, team appreciation events, or unique product launches. You get full access to our screen and audio/visual equipment for your exclusive event.</p>
-                    </div>
+                    <div class="bg-dark-card p-6 rounded-xl shadow-2xl border border-gray-700"><i class="fas fa-birthday-cake text-purple-main text-4xl mb-4"></i><h3 class="text-2xl font-bold text-white mb-2">Birthday Parties & Celebrations</h3><p class="text-gray-300">Celebrate birthdays with a private movie showing of your choice on the big screen! Enjoy private access to our venue, dedicated seating, and special deals on popcorn and drinks.</p></div>
+                    <div class="bg-dark-card p-6 rounded-xl shadow-2xl border border-gray-700"><i class="fas fa-graduation-cap text-purple-main text-4xl mb-4"></i><h3 class="text-2xl font-bold text-white mb-2">School Field Trips & Group Viewings</h3><p class="text-gray-300">Offer an exciting field trip experience! We accommodate large group sizes and can coordinate educational or recreational viewings during off-hours with special discounted rates.</p></div>
+                    <div class="bg-dark-card p-6 rounded-xl shadow-2xl border border-gray-700"><i class="fas fa-handshake text-purple-main text-4xl mb-4"></i><h3 class="text-2xl font-bold text-white mb-2">Corporate & Exclusive Private Rentals</h3><p class="text-gray-300">Rent the entire venue for presentations, corporate training, team appreciation events, or unique product launches. You get full access to our screen and audio/visual equipment for your exclusive event.</p></div>
                 </div>
                 <a href="#" onclick="showSection('contact-content', document.getElementById('nav-contact'))" class="inline-block mt-10 px-8 py-3 bg-purple-main text-white text-lg font-bold rounded-lg shadow-xl hover:bg-purple-darker transition uppercase">Inquire About Rentals Now</a>
             </div>
@@ -156,15 +160,9 @@
                 <p class="text-lg font-extrabold text-purple-main mb-10 uppercase tracking-wider text-center">We're Here to Help You!</p>
                 <div class="bg-dark-card p-8 rounded-xl shadow-2xl border border-gray-800 space-y-6 mb-10">
                     <h3 class="text-2xl font-bold text-white border-b border-gray-700 pb-3 text-center uppercase">Our Information</h3>
-                    <a href="https://www.google.com/maps/search/?api=1&query=4921+52+Ave,+High+Prairie,+AB+T0G+1E0" target="_blank" class="flex items-center justify-center text-gray-300 hover:text-purple-main transition-colors group">
-                        <i class="fas fa-map-marker-alt text-purple-main text-xl w-6"></i><span class="ml-3">4921 52 Ave, High Prairie, AB T0G 1E0</span>
-                    </a>
-                    <a href="tel:+17805233466" class="flex items-center justify-center text-gray-300 hover:text-purple-main transition-colors">
-                        <i class="fas fa-phone text-purple-main text-xl w-6"></i><span class="ml-3">(780) 523 3466</span>
-                    </a>
-                    <a href="mailto:Parktheatrehp@gmail.com" class="flex items-center justify-center text-gray-300 hover:text-purple-main transition-colors">
-                        <i class="fas fa-envelope text-purple-main text-xl w-6"></i><span class="ml-3">Parktheatrehp@gmail.com</span>
-                    </a>
+                    <a href="https://www.google.com/maps/search/?api=1&query=4921+52+Ave,+High+Prairie,+AB+T0G+1E0" target="_blank" class="flex items-center justify-center text-gray-300 hover:text-purple-main transition-colors group"><i class="fas fa-map-marker-alt text-purple-main text-xl w-6"></i><span class="ml-3">4921 52 Ave, High Prairie, AB T0G 1E0</span></a>
+                    <a href="tel:+17805233466" class="flex items-center justify-center text-gray-300 hover:text-purple-main transition-colors"><i class="fas fa-phone text-purple-main text-xl w-6"></i><span class="ml-3">(780) 523 3466</span></a>
+                    <a href="mailto:Parktheatrehp@gmail.com" class="flex items-center justify-center text-gray-300 hover:text-purple-main transition-colors"><i class="fas fa-envelope text-purple-main text-xl w-6"></i><span class="ml-3">Parktheatrehp@gmail.com</span></a>
                 </div>
                 <div class="bg-dark-card p-6 rounded-xl shadow-2xl border border-gray-800">
                     <p class="text-lg font-bold text-white mb-4 text-center uppercase">Send Us a Message</p>
@@ -185,12 +183,8 @@
                 <h2 class="text-5xl font-extrabold text-white mb-3 uppercase tracking-wider">Stay Connected</h2>
                 <p class="text-lg font-extrabold text-purple-main mb-12 uppercase tracking-wider">Follow the Magic!</p>
                 <div class="flex justify-center space-x-10">
-                    <a href="https://www.facebook.com/Park.Theatre.High.Prairie/" target="_blank" class="w-20 h-20 flex flex-col items-center justify-center bg-purple-main rounded-full text-white text-3xl hover:bg-purple-darker transform hover:scale-105 transition" title="Visit us on Facebook">
-                        <i class="fab fa-facebook-f"></i><span class="text-xs font-semibold mt-1">Facebook</span>
-                    </a>
-                    <a href="https://www.instagram.com/park_theatre?igshid=OGQ5ZDc2ODk2ZA%3D%3D" target="_blank" class="w-20 h-20 flex flex-col items-center justify-center bg-purple-main rounded-full text-white text-3xl hover:bg-purple-darker transform hover:scale-105 transition" title="Visit us on Instagram">
-                        <i class="fab fa-instagram"></i><span class="text-xs font-semibold mt-1">Instagram</span>
-                    </a>
+                    <a href="https://www.facebook.com/Park.Theatre.High.Prairie/" target="_blank" class="w-20 h-20 flex flex-col items-center justify-center bg-purple-main rounded-full text-white text-3xl hover:bg-purple-darker transform hover:scale-105 transition" title="Visit us on Facebook"><i class="fab fa-facebook-f"></i><span class="text-xs font-semibold mt-1">Facebook</span></a>
+                    <a href="https://www.instagram.com/park_theatre?igshid=OGQ5ZDc2ODk2ZA%3D%3D" target="_blank" class="w-20 h-20 flex flex-col items-center justify-center bg-purple-main rounded-full text-white text-3xl hover:bg-purple-darker transform hover:scale-105 transition" title="Visit us on Instagram"><i class="fab fa-instagram"></i><span class="text-xs font-semibold mt-1">Instagram</span></a>
                 </div>
             </div>
         </section>
@@ -222,6 +216,7 @@
         let allMovies = [], availableDates = [], activeDate = null, dateWindowStart = 0;
 
         const EL = {
+            mainContent: document.querySelector('#now-playing-content main'),
             movieList: document.getElementById('movie-list'),
             dateSelector: document.getElementById('date-selector'),
             scrollLeftBtn: document.getElementById('scroll-left-btn'),
@@ -362,7 +357,27 @@
                 renderDateSelector();
                 renderMovieList();
             } catch (e) {
-                EL.movieList.innerHTML = `<div class="p-8 text-center bg-dark-card rounded-xl"><p class="text-red-400">Data Retrieval Failed</p><p class="mt-2 text-gray-400">Could not connect to server.</p></div>`;
+                console.error("Fetch Error:", e);
+                const maintenanceHTML = `
+                    <div class="bg-dark-card rounded-xl p-8 text-center flex flex-col items-center mt-8">
+                        <div class="popcorn-container mb-6">
+                             <div class="kernel"></div> 
+                             <div class="kernel" style="animation-delay: -0.5s;"></div>
+                             <div class="kernel" style="animation-delay: -1s;"></div>
+                        </div>
+                        <h2 class="text-3xl font-extrabold text-amber-400 uppercase">System Temporarily Unavailable</h2>
+                        <p class="text-lg text-gray-300 mt-2 max-w-lg">
+                            Our online showtime feed is currently under maintenance. We apologize for the inconvenience.
+                        </p>
+                        <div class="mt-6 border-t border-gray-700 pt-6 w-full max-w-md">
+                            <p class="text-base text-gray-400">For current showtimes and to purchase tickets, please call or visit us:</p>
+                            <a href="tel:+17805233466" class="text-2xl font-bold text-purple-main hover:text-purple-400 transition mt-2 inline-block">
+                                (780) 523-3466
+                            </a>
+                        </div>
+                    </div>
+                `;
+                EL.mainContent.innerHTML = maintenanceHTML;
             } finally {
                 EL.loading.style.display = 'none';
             }
