@@ -7,26 +7,15 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Define a custom purple to match the request */
         .bg-purple-main { background-color: #9333EA; }
         .text-purple-main { color: #9333EA; }
         .border-purple-main { border-color: #9333EA; }
         .hover\:bg-purple-darker:hover { background-color: #7E22CE; }
-        
-        /* Custom Dark Backgrounds (High Contrast Cineplex Feel) */
         .bg-dark-cinematic { background-color: #0c0c16; } 
         .bg-dark-card { background-color: #1a1a2e; } 
         .bg-dark-input { background-color: #31314d; } 
-        
-        /* Custom Shadow Utility for Poster Frame - UPDATED STYLES */
-        .shadow-3xl-dark {
-            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.9);
-        }
-        .hover\:shadow-purple-glow:hover {
-            box-shadow: 0 0 20px rgba(147, 51, 234, 0.8), 0 0 15px rgba(255, 255, 255, 0.4);
-        }
-
-        /* FIX: Enhanced Active Date Styling for better visibility */
+        .shadow-3xl-dark { box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.9); }
+        .hover\:shadow-purple-glow:hover { box-shadow: 0 0 20px rgba(147, 51, 234, 0.8), 0 0 15px rgba(255, 255, 255, 0.4); }
         .active-date { 
             background-color: #9333EA; 
             color: white !important; 
@@ -34,104 +23,38 @@
             box-shadow: 0 0 10px rgba(147, 51, 234, 0.8), 0 0 5px rgba(147, 51, 234, 0.6);
             transform: scale(1.02);
         }
-        /* Ensure that the default date button has space for the border */
-        .date-selector-btn {
-            border: 2px solid transparent;
-            box-sizing: border-box; /* Crucial for sizing consistency */
-        }
-
-        /* Ensure poster image fits perfectly inside its container */
-        .poster-frame img {
-            object-fit: contain;
-            max-width: 100%;
-            height: auto;
-        }
-
-        /* Spinner style */
-        .spinner {
-            border-top-color: #9333EA; 
-            animation: spin 1s ease-in-out infinite;
-        }
+        .date-selector-btn { border: 2px solid transparent; box-sizing: border-box; }
+        .poster-frame img { object-fit: contain; max-width: 100%; height: auto; }
+        .spinner { border-top-color: #9333EA; animation: spin 1s ease-in-out infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* Custom style to hide scrollbar but keep scrolling functionality */
-        #date-scroll-container {
-            overflow-x: hidden; /* Hide horizontal scrollbar */
-        }
-        #date-scroll-container::-webkit-scrollbar {
-            display: none;
-        }
-        #date-scroll-container {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
-        }
-        
-        /* Added max-width to the date buttons to improve fit on small screens */
-        .date-selector-btn {
-            min-width: 6rem; /* 96px */
-            max-width: 6rem;
-        }
-        
-        /* FIX: Calculated width for 6 dates + gaps */
-        @media (min-width: 768px) {
-            .date-carousel-width {
-                width: 42rem; /* Exact width for 6 items + gaps */
-            }
-        }
-
-        /* LOGO FIXES */
-        /* FIX: Use max-height and w-auto to prevent squishing */
-        .header-logo {
-            max-height: 80px; 
-            width: auto;
-        }
-        /* Adjusted footer size with max-width */
-        .footer-logo {
-            max-width: 220px; 
-            width: auto;
-        }
-        /* Style for the logo container in the header */
+        #date-scroll-container { overflow-x: hidden; }
+        #date-scroll-container::-webkit-scrollbar { display: none; }
+        #date-scroll-container { -ms-overflow-style: none; scrollbar-width: none; }
+        .date-selector-btn { min-width: 6rem; max-width: 6rem; }
+        @media (min-width: 768px) { .date-carousel-width { width: 42rem; } }
+        .header-logo { max-height: 80px; width: auto; }
+        .footer-logo { max-width: 120px; height: auto; }
         .header-logo-frame {
-            background-color: var(--bg-dark-card); /* Dark background for framing */
-            padding: 8px; /* Slight padding around the logo */
+            background-color: var(--bg-dark-card); 
+            padding: 8px;
             border-radius: 8px;
-            /* GLOW EFFECT: Added a box shadow for the marquee glow effect */
             box-shadow: 0 0 20px rgba(147, 51, 234, 0.8), 0 0 15px rgba(255, 255, 255, 0.4);
-            /* NEW: Ensure the frame doesn't stretch and occupies the necessary space */
             flex-shrink: 0;
         }
-        /* FIX: Tighter padding for the door time box */
-        .door-time-box {
-            padding-top: 0.5rem; /* py-2 */
-            padding-bottom: 0.5rem; /* py-2 */
-        }
-        /* Mobile menu styling */
-        .mobile-menu-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(12, 12, 22, 0.95); /* Dark cinematic with opacity */
-            z-index: 49; /* Below sticky header, above main content */
-            padding-top: 100px; /* Space for the fixed header */
+        .mobile-menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(12, 12, 22, 0.98); z-index: 49; padding-top: 100px; }
+        .sticky-date-container { top: 100px; z-index: 40; background-color: #0c0c16; position: sticky; }
+        .global-footer-layout { grid-template-columns: 1fr 1fr 1fr; }
+        @media (max-width: 640px) {
+            .global-footer-layout { grid-template-columns: 1fr; }
+            .global-footer-layout > div { text-align: center; margin-bottom: 20px; }
+            .global-footer-layout .flex-col.items-start { align-items: center; }
+            .global-footer-layout .text-right { text-align: center; }
         }
     </style>
     <script>
         tailwind.config = {
             theme: {
-                extend: {
-                    colors: {
-                        'primary-dark': '#0c0c16', 
-                        'secondary-light': '#E5E7EB',
-                        'accent-purple': '#9333EA', 
-                        'warning-orange': '#F59E0B', 
-                        'soldout-gray': '#4B5563', 
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                }
+                extend: { colors: { 'primary-dark': '#0c0c16', 'secondary-light': '#E5E7EB', 'accent-purple': '#9333EA', 'warning-orange': '#F59E0B', 'soldout-gray': '#4B5563' }, fontFamily: { sans: ['Inter', 'sans-serif'] } }
             }
         }
     </script>
@@ -141,637 +64,315 @@
     <iframe name="google-form-target" id="google-form-target" style="display:none;"></iframe>
 
     <header class="bg-dark-cinematic shadow-2xl sticky top-0 z-50 border-b border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            
-            <div class="flex justify-center md:justify-start w-full md:w-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex justify-between items-center relative">
+            <div class="flex-1 flex justify-center md:flex-none md:justify-start">
                  <div class="header-logo-frame">
                      <img src="./Theatre logo.webp" alt="Park Theatre Logo" class="header-logo">
                  </div>
             </div>
-            
             <nav class="hidden md:flex space-x-6 items-center font-extrabold text-sm uppercase tracking-wider">
-                <a href="#" onclick="showSection('now-playing-content', this)" id="nav-now-playing" class="text-white hover:text-purple-main transition duration-150">
-                    Now Playing
-                </a>
-                <a href="#" onclick="showSection('rental-content', this)" id="nav-rental" class="text-white hover:text-purple-main transition duration-150">
-                    Rental
-                </a>
-                <a href="#" onclick="showSection('contact-content', this)" id="nav-contact" class="text-white hover:text-purple-main transition duration-150">
-                    Contact Us
-                </a>
-                <a href="#" onclick="showSection('social-content', this)" id="nav-social" class="text-white hover:text-purple-main transition duration-150">
-                    Social Media
-                </a>
+                <a href="#" onclick="showSection('now-playing-content', this)" id="nav-now-playing" class="text-white hover:text-purple-main transition">Now Playing</a>
+                <a href="#" onclick="showSection('rental-content', this)" id="nav-rental" class="text-white hover:text-purple-main transition">Rental</a>
+                <a href="#" onclick="showSection('contact-content', this)" id="nav-contact" class="text-white hover:text-purple-main transition">Contact Us</a>
+                <a href="#" onclick="showSection('social-content', this)" id="nav-social" class="text-white hover:text-purple-main transition">Social Media</a>
             </nav>
-            
-            <button class="md:hidden text-white text-xl" onclick="toggleMobileMenu()">
+            <button class="md:hidden absolute top-1/2 right-4 -translate-y-1/2 text-white text-xl p-2" onclick="toggleMobileMenu()">
                 <i class="fas fa-bars" id="mobile-menu-icon"></i>
             </button>
         </div>
-        
-        <div id="mobile-menu" class="mobile-menu-overlay hidden md:hidden">
-            <div class="flex flex-col items-center space-y-6 pt-10">
-                <a href="#" onclick="showSection('now-playing-content', document.getElementById('nav-now-playing-mobile')); toggleMobileMenu();" id="nav-now-playing-mobile" class="text-2xl text-white hover:text-purple-main transition duration-150 uppercase font-bold">
-                    Now Playing
-                </a>
-                <a href="#" onclick="showSection('rental-content', document.getElementById('nav-rental-mobile')); toggleMobileMenu();" id="nav-rental-mobile" class="text-2xl text-white hover:text-purple-main transition duration-150 uppercase font-bold">
-                    Rental
-                </a>
-                <a href="#" onclick="showSection('contact-content', document.getElementById('nav-contact-mobile')); toggleMobileMenu();" id="nav-contact-mobile" class="text-2xl text-white hover:text-purple-main transition duration-150 uppercase font-bold">
-                    Contact Us
-                </a>
-                <a href="#" onclick="showSection('social-content', document.getElementById('nav-social-mobile')); toggleMobileMenu();" id="nav-social-mobile" class="text-2xl text-white hover:text-purple-main transition duration-150 uppercase font-bold">
-                    Social Media
-                </a>
+        <div id="mobile-menu" class="mobile-menu-overlay hidden">
+            <div class="flex flex-col items-center space-y-8 pt-10">
+                <button class="absolute top-4 right-4 text-white text-4xl" onclick="toggleMobileMenu()"><i class="fas fa-times"></i></button>
+                <a href="#" onclick="showSection('now-playing-content', document.getElementById('nav-now-playing')); toggleMobileMenu();" class="text-2xl text-white hover:text-purple-main transition uppercase font-bold">Now Playing</a>
+                <a href="#" onclick="showSection('rental-content', document.getElementById('nav-rental')); toggleMobileMenu();" class="text-2xl text-white hover:text-purple-main transition uppercase font-bold">Rental</a>
+                <a href="#" onclick="showSection('contact-content', document.getElementById('nav-contact')); toggleMobileMenu();" class="text-2xl text-white hover:text-purple-main transition uppercase font-bold">Contact Us</a>
+                <a href="#" onclick="showSection('social-content', document.getElementById('nav-social')); toggleMobileMenu();" class="text-2xl text-white hover:text-purple-main transition uppercase font-bold">Social Media</a>
             </div>
         </div>
-        
     </header>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-
         <section id="now-playing-content" class="content-section">
             <main>
-                <h2 class="text-3xl sm:text-5xl font-extrabold text-white mb-1 text-center uppercase tracking-wider">
-                    NOW PLAYING
-                </h2>
-                <p class="text-base sm:text-xl font-extrabold text-purple-main mb-6 text-center uppercase tracking-wider">
-                    HIGH PRAIRIE
-                </p>
-
-                <div class="text-center bg-purple-main/20 py-2 rounded-lg border border-purple-main/50 mb-8 shadow-md door-time-box max-w-lg mx-auto">
-                    <p class="text-sm sm:text-base font-extrabold text-white uppercase tracking-wider">
-                        DOORS OPEN 1 HOUR BEFORE EACH SHOWTIME
-                    </p>
+                <h2 class="text-3xl sm:text-5xl font-extrabold text-white mb-1 text-center uppercase tracking-wider">NOW PLAYING</h2>
+                <p class="text-base sm:text-xl font-extrabold text-purple-main mb-6 text-center uppercase tracking-wider">HIGH PRAIRIE</p>
+                <div class="text-center bg-purple-main/20 py-2 rounded-lg border border-purple-main/50 mb-4 shadow-md max-w-lg mx-auto">
+                    <p class="text-sm sm:text-base font-extrabold text-white uppercase tracking-wider">DOORS OPEN 1 HOUR BEFORE EACH SHOWTIME</p>
                 </div>
-                
-                <div class="flex justify-center items-center mb-8">
-                    <div class="flex items-center space-x-0 w-full md:w-auto">
-                        <button id="scroll-left-btn" onclick="scrollDatesLeft()" class="flex-shrink-0 p-2 rounded-full bg-dark-card hover:bg-gray-700 text-white disabled:opacity-30 transition">
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <div id="date-scroll-container" class="overflow-x-hidden snap-x snap-mandatory w-full md:date-carousel-width"> 
-                            <div id="date-selector" class="flex space-x-4 p-2"> 
-                                </div>
+                <div class="sticky-date-container border-b border-gray-800 pb-4 pt-2">
+                    <div class="flex justify-center items-center">
+                        <div class="flex items-center space-x-0 w-full md:w-auto">
+                            <button id="scroll-left-btn" onclick="scrollDatesLeft()" class="flex-shrink-0 p-2 rounded-full bg-dark-card hover:bg-gray-700 text-white disabled:opacity-30 transition"><i class="fas fa-chevron-left"></i></button>
+                            <div id="date-scroll-container" class="overflow-x-hidden w-full md:date-carousel-width"> 
+                                <div id="date-selector" class="flex space-x-4 p-2"></div>
+                            </div>
+                            <button id="scroll-right-btn" onclick="scrollDatesRight()" class="flex-shrink-0 p-2 rounded-full bg-dark-card hover:bg-gray-700 text-white disabled:opacity-30 transition"><i class="fas fa-chevron-right"></i></button>
                         </div>
-                        <button id="scroll-right-btn" onclick="scrollDatesRight()" class="flex-shrink-0 p-2 rounded-full bg-dark-card hover:bg-gray-700 text-white disabled:opacity-30 transition">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
                     </div>
                 </div>
-                
-                <div id="movie-list" class="grid grid-cols-1 gap-8">
+                <div id="movie-list" class="grid grid-cols-1 gap-8 mt-8">
                     <div id="loading-indicator" class="col-span-full flex justify-center items-center py-20">
                         <div class="spinner w-10 h-10 border-4 rounded-full border-gray-700"></div>
                         <p class="ml-4 text-xl text-gray-500">Loading showtimes from ticketing feed...</p>
                     </div>
                 </div>
-
-                <div id="trailer-modal" class="fixed inset-0 bg-black bg-opacity-90 hidden items-center justify-center p-4 z-50 transition-opacity duration-300" 
-                     onclick="closeBookingModal()">
-                    <div class="bg-dark-card rounded-xl shadow-2xl w-full max-w-4xl h-[80vh] relative" onclick="event.stopPropagation()">
-                        <button onclick="closeBookingModal()" class="absolute top-0 right-0 m-3 text-white text-4xl leading-none z-50 opacity-75 hover:opacity-100 transition">
-                            ×
-                        </button>
-                        <div id="trailer-modal-content" class="w-full h-full"></div>
-                        <div class="absolute bottom-0 left-0 right-0 p-4 bg-dark-card/90 flex justify-center border-t border-purple-main">
-                            <button id="book-tickets-from-trailer" onclick="window.open(this.dataset.bookingUrl, '_blank'); closeBookingModal();"
-                                class="w-full sm:w-1/2 px-8 py-3 bg-purple-main rounded-lg text-white font-bold uppercase hover:bg-purple-darker transition duration-200 shadow-xl">
-                                BOOK TICKETS NOW
-                            </button>
-                        </div>
+                
+                <div id="trailer-modal" class="fixed inset-0 bg-black bg-opacity-90 hidden grid place-items-center p-4 z-[60]" onclick="closeBookingModal()">
+                    <div class="bg-dark-card rounded-xl shadow-2xl w-full max-w-4xl flex flex-col p-3 relative" onclick="event.stopPropagation()">
+                        <button onclick="closeBookingModal()" class="absolute top-0 right-0 m-1 text-white text-3xl z-10">×</button>
+                        <div id="trailer-modal-content" class="w-full aspect-video rounded-lg overflow-hidden"></div>
+                        <button id="book-tickets-from-trailer" onclick="window.open(this.dataset.bookingUrl, '_blank');" class="w-full sm:w-3/4 mx-auto mt-4 px-8 py-3 bg-purple-main rounded-lg text-white font-bold uppercase hover:bg-purple-darker transition">BOOK TICKETS NOW</button>
                     </div>
                 </div>
             </main>
         </section>
-
         <section id="rental-content" class="content-section hidden">
             <div class="text-center py-12">
                 <h2 class="text-5xl font-extrabold text-white mb-4 uppercase">Host Your Private Event</h2>
-                <p class="text-lg text-purple-main mb-12 max-w-4xl mx-auto">
-                    The perfect venue for birthdays, field trips, private screenings, and corporate functions.
-                </p>
-                
+                <p class="text-lg text-purple-main mb-12 max-w-4xl mx-auto">The perfect venue for birthdays, field trips, private screenings, and corporate functions.</p>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-                    
                     <div class="bg-dark-card p-6 rounded-xl shadow-2xl border border-gray-700">
                         <i class="fas fa-birthday-cake text-purple-main text-4xl mb-4"></i>
                         <h3 class="text-2xl font-bold text-white mb-2">Birthday Parties & Celebrations</h3>
                         <p class="text-gray-300">Celebrate birthdays with a private movie showing of your choice on the big screen! Enjoy private access to our venue, dedicated seating, and special deals on popcorn and drinks.</p>
                     </div>
-                    
                     <div class="bg-dark-card p-6 rounded-xl shadow-2xl border border-gray-700">
                         <i class="fas fa-graduation-cap text-purple-main text-4xl mb-4"></i>
                         <h3 class="text-2xl font-bold text-white mb-2">School Field Trips & Group Viewings</h3>
                         <p class="text-gray-300">Offer an exciting field trip experience! We accommodate large group sizes and can coordinate educational or recreational viewings during off-hours with special discounted rates.</p>
                     </div>
-
                     <div class="bg-dark-card p-6 rounded-xl shadow-2xl border border-gray-700">
                         <i class="fas fa-handshake text-purple-main text-4xl mb-4"></i>
                         <h3 class="text-2xl font-bold text-white mb-2">Corporate & Exclusive Private Rentals</h3>
                         <p class="text-gray-300">Rent the entire venue for presentations, corporate training, team appreciation events, or unique product launches. You get full access to our screen and audio/visual equipment for your exclusive event.</p>
                     </div>
                 </div>
-
-                <a href="#" onclick="showSection('contact-content', document.getElementById('nav-contact'))" class="inline-block mt-10 px-8 py-3 bg-purple-main text-white text-lg font-bold rounded-lg shadow-xl hover:bg-purple-darker transition duration-200 uppercase">
-                    Inquire About Rentals Now
-                </a>
+                <a href="#" onclick="showSection('contact-content', document.getElementById('nav-contact'))" class="inline-block mt-10 px-8 py-3 bg-purple-main text-white text-lg font-bold rounded-lg shadow-xl hover:bg-purple-darker transition uppercase">Inquire About Rentals Now</a>
             </div>
         </section>
-
         <section id="contact-content" class="content-section hidden">
             <div class="max-w-xl mx-auto pt-8">
                 <h2 class="text-5xl font-extrabold text-white mb-3 uppercase tracking-wider text-center">Contact Us</h2>
                 <p class="text-lg font-extrabold text-purple-main mb-10 uppercase tracking-wider text-center">We're Here to Help You!</p>
-
                 <div class="bg-dark-card p-8 rounded-xl shadow-2xl border border-gray-800 space-y-6 mb-10">
                     <h3 class="text-2xl font-bold text-white border-b border-gray-700 pb-3 text-center uppercase">Our Information</h3>
-
-                    <a href="http://googleusercontent.com/maps.google.com/8" target="_blank" class="flex items-center justify-center text-gray-300 hover:text-purple-main transition-colors group">
-                        <i class="fas fa-map-marker-alt text-purple-main text-xl w-6"></i>
-                        <span class="ml-3">4921 52 Ave, High Prairie, AB T0G 1E0</span>
+                    <a href="https://www.google.com/maps/search/?api=1&query=4921+52+Ave,+High+Prairie,+AB+T0G+1E0" target="_blank" class="flex items-center justify-center text-gray-300 hover:text-purple-main transition-colors group">
+                        <i class="fas fa-map-marker-alt text-purple-main text-xl w-6"></i><span class="ml-3">4921 52 Ave, High Prairie, AB T0G 1E0</span>
                     </a>
                     <a href="tel:+17805233466" class="flex items-center justify-center text-gray-300 hover:text-purple-main transition-colors">
-                        <i class="fas fa-phone text-purple-main text-xl w-6"></i>
-                        <span class="ml-3">(780) 523 3466</span>
+                        <i class="fas fa-phone text-purple-main text-xl w-6"></i><span class="ml-3">(780) 523 3466</span>
                     </a>
                     <a href="mailto:Parktheatrehp@gmail.com" class="flex items-center justify-center text-gray-300 hover:text-purple-main transition-colors">
-                        <i class="fas fa-envelope text-purple-main text-xl w-6"></i>
-                        <span class="ml-3">Parktheatrehp@gmail.com</span>
+                        <i class="fas fa-envelope text-purple-main text-xl w-6"></i><span class="ml-3">Parktheatrehp@gmail.com</span>
                     </a>
                 </div>
-
                 <div class="bg-dark-card p-6 rounded-xl shadow-2xl border border-gray-800">
                     <p class="text-lg font-bold text-white mb-4 text-center uppercase">Send Us a Message</p>
-                    <form 
-                        action="https://docs.google.com/forms/d/e/1FAIpQLSfvbMwSjX8TJY7T5fzEOUO044yGAzkAXQBU5J-PlgDJ2ZVgnw/formResponse" 
-                        method="POST" 
-                        target="google-form-target" 
-                        class="space-y-4"
-                        onsubmit="handleFormSubmission(); return false;" 
-                        id="contact-form"
-                    >
+                    <form action="https://docs.google.com/forms/d/e/1FAIpQLSfvbMwSjX8TJY7T5fzEOUO044yGAzkAXQBU5J-PlgDJ2ZVgnw/formResponse" method="POST" target="google-form-target" class="space-y-4" onsubmit="return handleFormSubmission();" id="contact-form">
                         <div class="space-y-4 sm:flex sm:space-x-4 sm:space-y-0">
-                            <input type="text" name="entry.301921969" placeholder="Your Name" id="form-name" required 
-                                   class="w-full p-3 rounded-lg bg-dark-input text-white border border-gray-700 placeholder-gray-700 focus:ring-purple-main focus:border-purple-main transition">
-                            <input type="email" name="entry.55824545" placeholder="Your Email" id="form-email" required 
-                                   class="w-full p-3 rounded-lg bg-dark-input text-white border border-gray-700 placeholder-gray-700 focus:ring-purple-main focus:border-purple-main transition">
+                            <input type="text" name="entry.301921969" placeholder="Your Name" class="w-full p-3 rounded-lg bg-dark-input text-white border border-gray-700 placeholder-gray-500 focus:ring-purple-main focus:border-purple-main transition" required>
+                            <input type="email" name="entry.55824545" placeholder="Your Email" class="w-full p-3 rounded-lg bg-dark-input text-white border border-gray-700 placeholder-gray-500 focus:ring-purple-main focus:border-purple-main transition" required>
                         </div>
-                        <textarea name="entry.497138322" rows="5" placeholder="Your Message" id="form-message" required 
-                                  class="w-full p-3 rounded-lg bg-dark-input text-white border border-gray-700 placeholder-gray-700 focus:ring-purple-main focus:border-purple-main transition"></textarea>
-
-                        <button type="submit"
-                                class="w-full py-3 bg-purple-main rounded-lg text-white font-extrabold uppercase hover:bg-purple-darker transition duration-150 shadow-md">
-                            Send Message
-                        </button>
+                        <textarea name="entry.497138322" rows="5" placeholder="Your Message" class="w-full p-3 rounded-lg bg-dark-input text-white border border-gray-700 placeholder-gray-500 focus:ring-purple-main focus:border-purple-main transition" required></textarea>
+                        <button type="submit" class="w-full py-3 bg-purple-main rounded-lg text-white font-extrabold uppercase hover:bg-purple-darker transition">Send Message</button>
                     </form>
-                    <p class="text-xs text-gray-400 mt-4 text-center" id="form-status-message">
-                        Your message will be sent securely via Google Forms.
-                    </p>
+                    <p class="text-xs text-gray-400 mt-4 text-center" id="form-status-message">Your message will be sent securely.</p>
                 </div>
             </div>
         </section>
-        
         <section id="social-content" class="content-section hidden">
             <div class="text-center py-12">
                 <h2 class="text-5xl font-extrabold text-white mb-3 uppercase tracking-wider">Stay Connected</h2>
                 <p class="text-lg font-extrabold text-purple-main mb-12 uppercase tracking-wider">Follow the Magic!</p>
-
                 <div class="flex justify-center space-x-10">
-                    <a href="https://www.facebook.com/Park.Theatre.High.Prairie/" target="_blank" 
-                       class="w-20 h-20 flex flex-col items-center justify-center bg-purple-main rounded-full text-white text-3xl 
-                              hover:bg-purple-darker transform hover:scale-105 transition duration-300 shadow-lg"
-                       title="Visit us on Facebook">
-                        <i class="fab fa-facebook-f"></i>
-                        <span class="text-xs font-semibold mt-1">Facebook</span>
+                    <a href="https://www.facebook.com/Park.Theatre.High.Prairie/" target="_blank" class="w-20 h-20 flex flex-col items-center justify-center bg-purple-main rounded-full text-white text-3xl hover:bg-purple-darker transform hover:scale-105 transition" title="Visit us on Facebook">
+                        <i class="fab fa-facebook-f"></i><span class="text-xs font-semibold mt-1">Facebook</span>
                     </a>
-                    <a href="https://www.instagram.com/park_theatre?igshid=OGQ5ZDc2ODk2ZA%3D%3D" target="_blank" 
-                       class="w-20 h-20 flex flex-col items-center justify-center bg-purple-main rounded-full text-white text-3xl 
-                              hover:bg-purple-darker transform hover:scale-105 transition duration-300 shadow-lg"
-                       title="Visit us on Instagram">
-                        <i class="fab fa-instagram"></i>
-                        <span class="text-xs font-semibold mt-1">Instagram</span>
+                    <a href="https://www.instagram.com/park_theatre?igshid=OGQ5ZDc2ODk2ZA%3D%3D" target="_blank" class="w-20 h-20 flex flex-col items-center justify-center bg-purple-main rounded-full text-white text-3xl hover:bg-purple-darker transform hover:scale-105 transition" title="Visit us on Instagram">
+                        <i class="fab fa-instagram"></i><span class="text-xs font-semibold mt-1">Instagram</span>
                     </a>
                 </div>
             </div>
         </section>
-
-    </div><footer class="bg-dark-cinematic border-t border-gray-800 py-6 text-center">
-        <div class="max-w-7xl mx-auto px-4 text-gray-500 text-sm">
-            <p>© <span id="current-year">2025</span> Park Theatre. All rights reserved.</p>
+    </div>
+    
+    <footer class="bg-dark-cinematic border-t border-gray-800 py-6">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-3 gap-y-4 items-center global-footer-layout">
+            <div class="flex flex-col items-center sm:items-start space-y-3 order-1 sm:order-1">
+                <img src="./Theatre logo.webp" alt="Park Theatre Logo" class="footer-logo mb-2">
+                <div class="flex space-x-3">
+                    <a href="https://www.facebook.com/Park.Theatre.High.Prairie/" target="_blank" class="text-gray-400 hover:text-purple-main transition"><i class="fab fa-facebook-f text-xl"></i></a>
+                    <a href="https://www.instagram.com/park_theatre?igshid=OGQ5ZDc2ODk2ZA%3D%3D" target="_blank" class="text-gray-400 hover:text-purple-main transition"><i class="fab fa-instagram text-xl"></i></a>
+                </div>
+            </div>
+            <div class="flex flex-col items-center text-sm text-gray-400 space-y-1 order-3 sm:order-2">
+                <a href="https://www.google.com/maps/search/?api=1&query=4921+52+Ave,+High+Prairie,+AB+T0G+1E0" target="_blank" class="hover:text-purple-main transition">4921 52 Ave, High Prairie, AB T0G 1E0</a>
+                <a href="tel:+17805233466" class="hover:text-purple-main transition">(780) 523 3466</a>
+            </div>
+            <div class="text-center sm:text-right text-xs text-gray-500 order-2 sm:order-3">
+                <p>© <span id="current-year"></span> Park Theatre. All rights reserved.</p>
+                <p>Website by Park Theatre</p>
+            </div>
         </div>
     </footer>
 
     <script>
-        // --- CONFIGURATION & ELEMENTS ---
         const API_ENDPOINT = '/api/movies'; 
-        const MOVIE_LIST_EL = document.getElementById('movie-list');
-        const DATE_SELECTOR_EL = document.getElementById('date-selector');
-        const SCROLL_LEFT_BTN = document.getElementById('scroll-left-btn');
-        const SCROLL_RIGHT_BTN = document.getElementById('scroll-right-btn');
-        const LOADING_EL = document.getElementById('loading-indicator');
-        const TRAILER_MODAL = document.getElementById('trailer-modal');
-        const TRAILER_MODAL_CONTENT = document.getElementById('trailer-modal-content');
-
-        // --- STATE ---
         const DATES_PER_VIEW = 6;
-        let allMovies = [];
-        let availableDates = [];
-        let activeDate = null;
-        let dateWindowStart = 0;
+        let allMovies = [], availableDates = [], activeDate = null, dateWindowStart = 0;
 
-        // --- SPA NAVIGATION LOGIC (UPDATED) ---
+        const EL = {
+            movieList: document.getElementById('movie-list'),
+            dateSelector: document.getElementById('date-selector'),
+            scrollLeftBtn: document.getElementById('scroll-left-btn'),
+            scrollRightBtn: document.getElementById('scroll-right-btn'),
+            loading: document.getElementById('loading-indicator'),
+            trailerModal: document.getElementById('trailer-modal'),
+            trailerContent: document.getElementById('trailer-modal-content'),
+            mobileMenu: document.getElementById('mobile-menu'),
+            mobileMenuIcon: document.getElementById('mobile-menu-icon'),
+        };
 
-        const SECTIONS = ['now-playing-content', 'rental-content', 'contact-content', 'social-content'];
-
-        function showSection(sectionId, clickedElement) {
-            
-            // Hide all sections
-            SECTIONS.forEach(id => {
-                const section = document.getElementById(id);
-                if (section) section.classList.add('hidden');
-            });
-
-            // Show the requested section
-            const sectionToShow = document.getElementById(sectionId);
-            if (sectionToShow) sectionToShow.classList.remove('hidden');
-            
-            // Highlight active link
-            document.querySelectorAll('nav a').forEach(a => a.classList.remove('text-purple-main'));
-            if (clickedElement) clickedElement.classList.add('text-purple-main');
-
-            // If switching back to Now Playing, fetch movies if not already loaded
-            if (sectionId === 'now-playing-content' && allMovies.length === 0) {
-                fetchMovies(); 
+        function showSection(id, el) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.add('hidden'));
+            document.getElementById(id)?.classList.remove('hidden');
+            document.querySelectorAll('nav a, #mobile-menu a').forEach(a => a.classList.remove('text-purple-main'));
+            if(el) {
+                const baseId = el.id.replace('-mobile', '');
+                document.getElementById(baseId)?.classList.add('text-purple-main');
+                document.getElementById(baseId + '-mobile')?.classList.add('text-purple-main');
             }
         }
-        
-        // --- MOBILE MENU LOGIC ---
-        const mobileMenu = document.getElementById('mobile-menu');
-        const mobileMenuIcon = document.getElementById('mobile-menu-icon');
-        
         function toggleMobileMenu() {
-            mobileMenu.classList.toggle('hidden');
-            // Change icon from hamburger to X
-            if (mobileMenu.classList.contains('hidden')) {
-                mobileMenuIcon.classList.remove('fa-times');
-                mobileMenuIcon.classList.add('fa-bars');
-            } else {
-                mobileMenuIcon.classList.remove('fa-bars');
-                mobileMenuIcon.classList.add('fa-times');
-            }
+            EL.mobileMenu.classList.toggle('hidden');
+            EL.mobileMenuIcon.classList.toggle('fa-bars');
+            EL.mobileMenuIcon.classList.toggle('fa-times');
         }
-        
-        // --- FORM SUBMISSION LOGIC (SILENT GOOGLE FORMS) ---
-        
         function handleFormSubmission() {
-            // Display submitting message immediately
-            document.getElementById('form-status-message').innerHTML = '<span class="text-purple-main">Sending message...</span>';
-            
-            // Submit form programmatically to the hidden iframe target
+            const formStatus = document.getElementById('form-status-message');
+            formStatus.innerHTML = '<span class="text-purple-main">Sending message...</span>';
             document.getElementById('contact-form').submit(); 
-            
-            setTimeout(function() {
+            setTimeout(() => {
                 document.getElementById('contact-form').reset(); 
-                document.getElementById('form-status-message').innerHTML = '<span class="text-green-400">Thank you! Your message has been sent successfully.</span>';
-                
-            }, 1000); 
-
-            // Stop the browser from attempting to navigate away from the page
+                formStatus.innerHTML = '<span class="text-green-400">Thank you! Your message has been sent.</span>';
+            }, 1000);
             return false; 
         }
-
-        // --- UTILITY FUNCTIONS (ALL CRITICAL UTILITY FUNCTIONS INCLUDED) ---
-        
         function closeBookingModal() {
-            TRAILER_MODAL.classList.remove('flex');
-            TRAILER_MODAL.classList.add('hidden');
-            TRAILER_MODAL_CONTENT.innerHTML = '';
-            document.getElementById('book-tickets-from-trailer').removeAttribute('data-booking-url');
+            EL.trailerModal.classList.add('hidden');
+            EL.trailerContent.innerHTML = '';
         }
-        
         function openBookingModal(url, bookingUrl) {
-            if (url.includes('youtube.com/embed')) {
-                const iframeHTML = `<iframe class="w-full h-full rounded-xl" src="${url}" frameborder="0" allow="autoplay; encrypted-media; gyroscope;" allowfullscreen></iframe>`;
-                TRAILER_MODAL_CONTENT.innerHTML = iframeHTML;
-                document.getElementById('book-tickets-from-trailer').setAttribute('data-booking-url', bookingUrl);
-                TRAILER_MODAL.classList.remove('hidden');
-                TRAILER_MODAL.classList.add('flex');
-            } else {
-                window.open(url, '_blank');
-            }
+            const cleanUrl = `${url}&rel=0&modestbranding=1&iv_load_policy=3`;
+            EL.trailerContent.innerHTML = `<iframe class="w-full h-full" src="${cleanUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+            document.getElementById('book-tickets-from-trailer').dataset.bookingUrl = bookingUrl;
+            EL.trailerModal.classList.remove('hidden');
         }
-
-        function getDateStringLocal(dateObj) {
-            const year = dateObj.getFullYear();
-            const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-            const day = String(dateObj.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
-        }
-        
-        function formatRuntime(minutes) {
-            if (!minutes || isNaN(parseInt(minutes))) return 'N/A';
-            const totalMinutes = parseInt(minutes, 10);
-            const h = Math.floor(totalMinutes / 60);
-            const m = totalMinutes % 60;
-            
-            if (h > 0 && m > 0) return `${h}h ${m}m`;
-            if (h > 0) return `${h}h`;
-            return `${m}m`;
-        }
-
-        function formatTime12hr(time24) {
-             if (!time24 || time24 === 'None') return 'N/A';
-            try {
-                const [hours24, minutes] = time24.split(':');
-                let hours = parseInt(hours24, 10);
-                const ampm = hours >= 12 ? 'PM' : 'AM';
-                hours = hours % 12;
-                hours = hours ? hours : 12;
-                return `${hours}:${minutes} ${ampm}`;
-            } catch {
-                return time24;
-            }
-        }
-
+        function getDateStringLocal(d) { return new Date(d.getTime() - (d.getTimezoneOffset() * 60000)).toISOString().split('T')[0]; }
+        function formatRuntime(m) { if (!m || isNaN(parseInt(m))) return 'N/A'; const h=Math.floor(parseInt(m)/60), r=parseInt(m)%60; return h>0?`${h}h ${r}m`:`${r}m`; }
+        function formatTime12hr(t) { if (!t) return 'N/A'; try { const [h,m]=t.split(':'), hr=parseInt(h,10); return `${hr%12||12}:${m} ${hr>=12?'PM':'AM'}`; } catch { return t; } }
         function formatDate(dateStr, includeDay = false) {
-            if (!dateStr || dateStr === 'None' || dateStr === 'N/A') return 'TBA';
-            try {
-                const now = new Date();
-                const todayDateString = getDateStringLocal(now); 
-                const tomorrow = new Date(now);
-                tomorrow.setDate(now.getDate() + 1);
-                const tomorrowDateString = getDateStringLocal(tomorrow);
-                
-                if (includeDay) {
-                    if (dateStr === todayDateString) return 'Today';
-                    if (dateStr === tomorrowDateString) return 'Tomorrow';
-                }
-
-                const dateObj = new Date(dateStr + 'T00:00:00'); 
-                let options = { month: 'short', day: 'numeric' };
-                if (includeDay) options = { weekday: 'short', month: 'short', day: 'numeric' };
-                
-                return dateObj.toLocaleDateString('en-US', options).replace(/,/, ''); 
-            } catch {
-                return dateStr;
+            const today = new Date(); const tomorrow = new Date(); tomorrow.setDate(today.getDate() + 1);
+            if (includeDay) {
+                if (dateStr === getDateStringLocal(today)) return 'Today';
+                if (dateStr === getDateStringLocal(tomorrow)) return 'Tomorrow';
             }
+            const dateObj = new Date(dateStr + 'T12:00:00Z');
+            const options = includeDay ? { weekday: 'short', month: 'short', day: 'numeric' } : { month: 'short', day: 'numeric' };
+            return dateObj.toLocaleDateString('en-US', options).replace(/,/, '');
         }
 
         function updateScrollButtons() {
-            SCROLL_LEFT_BTN.disabled = dateWindowStart === 0;
-            SCROLL_RIGHT_BTN.disabled = dateWindowStart + DATES_PER_VIEW >= availableDates.length;
+            EL.scrollLeftBtn.disabled = dateWindowStart === 0;
+            EL.scrollRightBtn.disabled = dateWindowStart + DATES_PER_VIEW >= availableDates.length;
         }
-
-        function scrollDatesLeft() {
-            if (dateWindowStart > 0) {
-                dateWindowStart = Math.max(0, dateWindowStart - 1); 
-                renderDateSelector();
-            }
-        }
-
-        function scrollDatesRight() {
-            if (dateWindowStart + DATES_PER_VIEW < availableDates.length) {
-                dateWindowStart = Math.min(availableDates.length - DATES_PER_VIEW, dateWindowStart + 1); 
-                renderDateSelector();
-            }
-        }
-
-
+        function scrollDatesLeft() { if (dateWindowStart > 0) { dateWindowStart--; renderDateSelector(); } }
+        function scrollDatesRight() { if (dateWindowStart + DATES_PER_VIEW < availableDates.length) { dateWindowStart++; renderDateSelector(); } }
+        
         function renderDateSelector() {
-            if (availableDates.length === 0) {
-                DATE_SELECTOR_EL.innerHTML = '';
-                updateScrollButtons();
-                return;
-            }
-
             const datesToDisplay = availableDates.slice(dateWindowStart, dateWindowStart + DATES_PER_VIEW);
-
-            DATE_SELECTOR_EL.innerHTML = datesToDisplay.map(dateStr => {
+            EL.dateSelector.innerHTML = datesToDisplay.map(dateStr => {
                 const isSelected = dateStr === activeDate;
-                const formattedDate = formatDate(dateStr, true);
-                const dayParts = formattedDate.split(' '); 
+                const formatted = formatDate(dateStr, true).split(' ');
                 let dayLabel, dayNum, monthLabel;
-
-                if (dayParts.length === 1) { 
-                    dayLabel = dayParts[0].toUpperCase();
-                    const standardParts = formatDate(dateStr).split(' ');
-                    dayNum = standardParts.length > 1 ? standardParts[1] : ''; 
-                    monthLabel = standardParts.length > 0 ? standardParts[0].toUpperCase() : '';
-                } else { 
-                    dayLabel = dayParts[0].toUpperCase();
-                    monthLabel = dayParts[1].toUpperCase();
-                    dayNum = dayParts[2];
-                }
-
-                return `
-                    <button 
-                        class="date-selector-btn flex-none w-24 py-2 rounded-xl text-center transition duration-150 
-                               bg-gray-800 text-gray-400 hover:bg-gray-700 ${isSelected ? 'active-date' : ''}"
-                        data-date="${dateStr}"
-                        onclick="selectDate('${dateStr}')"
-                    >
-                        <span class="block text-sm font-medium">${dayLabel}</span>
-                        <span class="block text-xl font-bold">${dayNum}</span>
-                        <span class="block text-xs uppercase">${monthLabel}</span>
-                    </button>
-                `;
+                if (formatted.length === 1) {
+                    dayLabel = formatted[0];
+                    const std = formatDate(dateStr, false).split(' ');
+                    monthLabel = std[0]; dayNum = std[1];
+                } else { [dayLabel, monthLabel, dayNum] = formatted; }
+                return `<button class="date-selector-btn flex-none w-24 py-2 rounded-xl text-center ${isSelected?'active-date':'bg-dark-card text-gray-400 hover:bg-gray-700'}" data-date="${dateStr}" onclick="selectDate('${dateStr}')"><span class="block text-sm font-medium uppercase">${dayLabel}</span><span class="block text-xl font-bold">${dayNum}</span><span class="block text-xs uppercase">${monthLabel}</span></button>`;
             }).join('');
-
             updateScrollButtons();
         }
 
-        function renderMovieList() {
-            renderDateSelector();
-            
-            const filteredMovies = allMovies.filter(movie => {
-                const showtimes = movie.showtimesByDate[activeDate];
-                return showtimes && showtimes.length > 0;
-            });
-
-            if (filteredMovies.length === 0) {
-                 if (document.getElementById('now-playing-content').classList.contains('hidden')) {
-                 } else {
-                     MOVIE_LIST_EL.innerHTML = `
-                         <div class="col-span-full p-8 text-center bg-dark-card rounded-xl">
-                             <p class="text-xl text-white">No showtimes available for ${formatDate(activeDate, true)}.</p>
-                             <p class="mt-2 text-gray-500">Please select a different date above or check back tomorrow.</p>
-                         </div>
-                     `;
-                 }
-                return;
-            }
-
-            MOVIE_LIST_EL.innerHTML = filteredMovies.map(movie => createMovieCard(movie)).join('');
-        }
-
         function createMovieCard(movie) {
-            const placeholderImageUrl = 'https://placehold.co/180x270/9333EA/FFFFFF?text=Poster+N/A';
-            const imageSrc = movie.posterUrl || placeholderImageUrl;
-            const currentShowtimes = movie.showtimesByDate[activeDate] || [];
-            
-            const youtubeId = movie.youtubeId ? (movie.youtubeId.includes('youtube.com') ? movie.youtubeId.split('/').pop().replace('embed/', '') : youtubeId) : null;
-            
-            const now = new Date();
-            const todayDateString = getDateStringLocal(now); 
-            const isToday = activeDate === todayDateString;
-
-            const showtimeButtonsHTML = currentShowtimes.map(showtime => {
-                const displayTime = formatTime12hr(showtime.time);
-                let buttonClasses = 'bg-dark-input text-white hover:bg-purple-darker';
-
-                let showIsPast = false;
-                if (isToday) {
-                    const showDateTime = new Date(`${activeDate}T${showtime.time}`);
-                    const CUTOFF_MS = 45 * 60 * 1000;
-                    if (now.getTime() > showDateTime.getTime() + CUTOFF_MS) { 
-                        showIsPast = true;
-                    }
+            const showtimes = movie.showtimesByDate[activeDate] || [];
+            if (showtimes.length === 0) return '';
+            const passesMessageHTML = (showtimes[0]?.passesAllowed === 'N') ? `<p class="text-xs font-semibold text-red-400 mb-2">NO PASSES OR COUPONS</p>` : '';
+            const showtimeButtonsHTML = showtimes.map(showtime => {
+                let btn = { tag: 'a', href: `href="${showtime.bookingUrl}" target="_blank"`, title: 'Book tickets', content: formatTime12hr(showtime.time), classes: 'bg-dark-input text-white hover:bg-purple-darker' };
+                if (showtime.soldOutLevel === 'S' || parseInt(showtime.ticketsSold, 10) >= 100) {
+                    btn = { tag: 'span', href: '', title: 'SOLD OUT', content: 'SOLD OUT', classes: 'bg-soldout-gray text-gray-400 cursor-not-allowed line-through' };
+                } else if (showtime.soldOutLevel === 'W') {
+                    btn.classes = 'bg-warning-orange text-white hover:bg-orange-600';
                 }
-
-                if (showIsPast) {
-                    buttonClasses = 'bg-gray-800 text-red-400 cursor-not-allowed';
-                    
-                    return `<span class="${buttonClasses} text-base font-semibold px-4 py-2 rounded-md cursor-not-allowed" title="SHOW STARTED">SHOW STARTED</span>`;
-                } 
-                
-                if (showtime.soldOutLevel === 'S') {
-                    buttonClasses = 'bg-soldout-gray text-gray-400 cursor-not-allowed line-through';
-                    
-                    return `<span class="${buttonClasses} text-base font-semibold px-4 py-2 rounded-md cursor-not-allowed" title="SOLD OUT">SOLD OUT</span>`;
-                } 
-                
-                if (showtime.soldOutLevel === 'W') {
-                    buttonClasses = 'bg-warning-orange text-white hover:bg-orange-600';
-                }
-
-                return `
-                    <a href="${showtime.bookingUrl}" target="_blank"
-                        class="${buttonClasses} text-base font-semibold px-4 py-2 rounded-md transition duration-150 shadow-md whitespace-nowrap"
-                        title="Book tickets for ${showtime.screen} - Opens in new tab"
-                    >
-                        ${displayTime}
-                    </a>
-                `;
+                return `<${btn.tag} ${btn.href} class="${btn.classes} text-base font-semibold px-4 py-2 rounded-md transition shadow-md whitespace-nowrap" title="${btn.title}">${btn.content}</${btn.tag}>`;
             }).join('');
-
+            
             return `
                 <div class="grid grid-cols-1 md:grid-cols-5 bg-dark-card rounded-xl shadow-xl overflow-hidden border border-gray-800">
-                    
-                    <div class="col-span-1 relative p-4 bg-dark-input flex justify-center md:justify-start items-center poster-frame" style="min-height: 350px;">
-                        <img src="${imageSrc}" alt="Poster for ${movie.title}" 
-                             class="rounded-lg shadow-3xl-dark transition duration-300 hover:scale-[1.05] hover:shadow-purple-glow max-w-full md:max-w-[80%]" 
-                             onerror="this.onerror=null; this.src='${placeholderImageUrl}';">
-                    </div>
-
+                    <div class="col-span-1 p-4 bg-dark-input flex items-center justify-center poster-frame"><img src="${movie.posterUrl || '#'}" alt="Poster for ${movie.title}" class="rounded-lg shadow-3xl-dark transition hover:scale-105 hover:shadow-purple-glow"></div>
                     <div class="col-span-1 md:col-span-3 p-6 flex flex-col justify-center">
-                        
-                        <div class="flex items-center mb-2">
-                             <span class="text-sm font-bold uppercase py-1.5 px-3 rounded-md border border-gray-600 text-gray-400 bg-gray-800 tracking-wider">
-                                ${movie.certificate || 'UNR'}
-                            </span>
-                        </div>
-                        
-                        <h3 class="text-2xl sm:text-3xl font-extrabold text-white mb-2 uppercase">${movie.title || 'Untitled Movie'}</h3>
-                        
-                        <div class="flex flex-wrap gap-x-4 gap-y-1 text-xs sm:text-sm font-medium text-gray-400 mb-4">
-                            <span>Runtime: ${formatRuntime(movie.runningTime)}</span> 
-                            <span>| Dir: ${movie.directors || 'N/A'}</span>
-                            <span>| Starring: ${movie.actors || 'N/A'}</span>
-                        </div>
-                        <p class="text-sm sm:text-base text-gray-300">${movie.synopsis || 'Synopsis not available.'}</p>
-                        
-                        ${youtubeId ? `
-                            <button type="button" onclick="openBookingModal('https://www.youtube.com/embed/${youtubeId}?autoplay=1', '${currentShowtimes?.[0]?.bookingUrl || '#'}')"
-                                class="mt-4 flex items-center space-x-2 w-full sm:w-48 px-4 py-2 bg-purple-main rounded-lg text-white font-bold uppercase hover:bg-purple-darker transition duration-200 shadow-xl">
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 4l15 8-15 8z"/></svg>
-                                <span>WATCH TRAILER</span>
-                            </button>
-                        ` : ''}
+                        <span class="text-sm font-bold uppercase py-1.5 px-3 rounded-md border border-gray-600 text-gray-400 bg-gray-800 w-fit mb-2">${movie.certificate||'UNR'}</span>
+                        <h3 class="text-2xl sm:text-3xl font-extrabold text-white mb-2 uppercase">${movie.title}</h3>
+                        <div class="flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-400 mb-4"><span>Runtime: ${formatRuntime(movie.runningTime)}</span><span>| Dir: ${movie.directors||'N/A'}</span></div>
+                        <p class="text-base text-gray-300">${movie.synopsis||'N/A'}</p>
+                        ${movie.youtubeId ? `<button onclick="openBookingModal('https://www.youtube.com/embed/${movie.youtubeId}?autoplay=1', '${showtimes[0]?.bookingUrl||'#'}')" class="mt-4 flex items-center justify-center space-x-2 w-48 px-4 py-2 bg-red-600 rounded-lg text-white font-bold uppercase hover:bg-red-700 transition shadow-xl"><i class="fab fa-youtube"></i><span>Watch Trailer</span></button>` : ''}
                     </div>
-
-                    <div class="col-span-1 md:col-span-1 p-6 flex flex-col justify-start border-t border-gray-800 md:border-t-0 md:border-l">
-                        <h4 class="text-xl font-bold text-white mb-3 uppercase tracking-wider">SHOWTIMES</h4>
-                        <div class="flex flex-wrap gap-2 overflow-y-auto"> 
-                            ${showtimeButtonsHTML}
-                        </div>
+                    <div class="col-span-1 p-6 flex flex-col justify-start border-t border-gray-800 md:border-t-0 md:border-l">
+                        <h4 class="text-xl font-bold text-white mb-3 uppercase tracking-wider">Showtimes</h4>
+                        ${passesMessageHTML}
+                        <div class="flex flex-wrap gap-2">${showtimeButtonsHTML}</div>
                         <p class="text-xs text-gray-500 mt-4">Tickets open in a new tab.</p>
                     </div>
-
-                </div>
-            `;
+                </div>`;
         }
-        
+        function renderMovieList() {
+            const filtered = allMovies.filter(m => m.showtimesByDate[activeDate]);
+            EL.movieList.innerHTML = filtered.length ? filtered.map(createMovieCard).join('') : `<div class="p-8 text-center bg-dark-card rounded-xl"><p>No showtimes for ${formatDate(activeDate, true)}.</p></div>`;
+        }
         function selectDate(newDate) {
-            if (newDate === activeDate) return; 
-
-            const oldBtn = document.querySelector(`.active-date`);
-            if (oldBtn) oldBtn.classList.remove('active-date');
-
-            const newBtn = document.querySelector(`[data-date="${newDate}"]`);
-            if (newBtn) newBtn.classList.add('active-date');
-
             activeDate = newDate;
             renderMovieList();
+            document.querySelectorAll('.date-selector-btn').forEach(b => b.classList.toggle('active-date', b.dataset.date === newDate));
         }
-
         async function fetchMovies() {
-            const API_ENDPOINT = '/api/movies'; 
-            
-            if (document.getElementById('loading-indicator').classList.contains('hidden')) {
-                return;
-            }
-            
-            document.getElementById('loading-indicator').classList.remove('hidden');
-            
+            EL.loading.style.display = 'flex';
             try {
-                const response = await fetch(API_ENDPOINT);
-                
-                if (!response.ok) {
-                    throw new Error(`Proxy status: ${response.status}.`);
-                }
-                
-                allMovies = await response.json();
-                
-                const dateSet = new Set();
-                allMovies.forEach(movie => {
-                    Object.keys(movie.showtimesByDate).forEach(date => dateSet.add(date));
-                });
-                
-                let dates = Array.from(dateSet).sort();
-                
-                const now = new Date();
-                const todayDateString = getDateStringLocal(now);
-                
-                availableDates = dates.filter(dateStr => dateStr >= todayDateString);
-                
+                const res = await fetch(API_ENDPOINT);
+                if (!res.ok) throw new Error(`Proxy status: ${res.status}`);
+                allMovies = await res.json();
+                const dateSet = new Set(allMovies.flatMap(m => Object.keys(m.showtimesByDate)));
+                const today = getDateStringLocal(new Date());
+                availableDates = Array.from(dateSet).sort().filter(d => d >= today);
                 if (availableDates.length > 0) {
                     activeDate = availableDates[0];
-                    dateWindowStart = 0; 
+                    dateWindowStart = 0;
                 }
-                
+                renderDateSelector();
                 renderMovieList();
-
-            } catch (error) {
-                console.error("Failed to load movie data:", error);
-                
-                document.getElementById('movie-list').innerHTML = `
-                    <div class="col-span-full p-8 text-center bg-dark-card rounded-xl">
-                        <p class="text-xl text-accent-purple">Data Retrieval Failed</p>
-                        <p class="mt-2 text-gray-400">Error: ${error.message}</p>
-                        <p class="mt-4 text-sm text-gray-500">Please ensure 'proxy_server.py' is actively running in your command line.</p>
-                    </div>
-                `;
+            } catch (e) {
+                EL.movieList.innerHTML = `<div class="p-8 text-center bg-dark-card rounded-xl"><p class="text-red-400">Data Retrieval Failed</p><p class="mt-2 text-gray-400">Could not connect to server.</p></div>`;
             } finally {
-                document.getElementById('loading-indicator').classList.add('hidden');
+                EL.loading.style.display = 'none';
             }
         }
-
-        window.onload = function() {
+        
+        window.onload = () => {
             fetchMovies();
-            document.getElementById('nav-now-playing').classList.add('text-purple-main');
+            showSection('now-playing-content', document.getElementById('nav-now-playing'));
+            document.getElementById('current-year').textContent = new Date().getFullYear();
         };
-
     </script>
 </body>
 </html>
